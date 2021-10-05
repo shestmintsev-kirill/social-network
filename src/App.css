@@ -12,24 +12,10 @@
   grid-gap: 10px;
 }
 
-.header {
-  grid-area: h;
-  background-color: green;
-}
-
-.nav {
-  grid-area: n;
-  background-color: green;
-}
-
-.content {
+.app-wrapper-content {
   grid-area: c;
 }
 
-.header img {
-  width: 20px;
-}
-
-.content img {
+.app-wrapper-content img {
   width: 100%;
 }
