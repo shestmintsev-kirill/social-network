@@ -1,3 +1,7 @@
+export let rerender = () => {
+  console.log('update state');
+}
+
 let state = {
   profilePage: {
     posts: [
@@ -32,6 +36,11 @@ export let addPost = (post) => {
     likesCount: 0
   };
   state.profilePage.posts.push(newPost);
+  rerender(state);
+}
+
+export const subscribe = (observer) => {
+  rerender = observer;
 }
 
 export default state;
