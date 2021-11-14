@@ -1,0 +1,16 @@
+.avatarWrapper {
+  width: 100px;
+}
+
+.activePage {
+  font-weight: bold;
+}
+
+.page {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.page + .page {
+  margin-left: 10px;
+}
