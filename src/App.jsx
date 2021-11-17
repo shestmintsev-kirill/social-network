@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
-import Profile from "./components/Profile/Profile";
+import ProfileContainer from "./components/Profile/ProfileContainer";
 import { Route } from "react-router-dom";
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import UsersContainer from "./components/Users/UsersContainer";
@@ -16,8 +16,8 @@ const App = () => {
         <Route path="/dialogs">
           <DialogsContainer />
         </Route>
-        <Route path="/profile">
-          <Profile />
+        <Route path="/profile/:userId?">
+          <ProfileContainer />
         </Route>
         <Route path="/users">
           <UsersContainer />
