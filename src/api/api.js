@@ -14,22 +14,36 @@ export const usersAPI = {
     return instance.get(`users?page=${currentPage}&count=${pageSize}`).then(res => res.data)
   },
 
-  getFollow(id) {
+  follow(id) {
     return instance.post(`follow/${id}`, null).then(res => res.data)
   },
 
-  getUnFollow(id) {
-    return instance.delete(`follow/${id}`, null).then(res => res.data)
+  unFollow(id) {
+    return instance.delete(`follow/${id}`).then(res => res.data)
+  }
+}
+
+export const profileAPI = {
+  getUserProfile(id) {
+    return instance.get(`profile/${id}`).then(res => res.data)
+  },
+
+  getUserStatus(id) {
+    return instance.get(`profile/status/${id}`).then(res => res.data)
+  },
+
+  updateStatus(status) {
+    return instance.put(`profile/status/`, { status: status }).then(res => res.data)
   }
 }
 
 export const authAPI = {
-  getAuthData() {
+  me() {
     return instance.get(`auth/me`).then(res => res.data)
   },
 
-  getUserProfile(id) {
-    return instance.get(`profile/${id}`).then(res => res.data)
+  login(login) {
+    return instance.post('/auth/login', { login }).then(res => res.data)
   }
 }
 
