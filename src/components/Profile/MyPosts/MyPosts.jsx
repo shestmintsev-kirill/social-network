@@ -1,5 +1,6 @@
-import { Formik } from 'formik';
+import { useFormik } from 'formik';
 import React from 'react';
+import { Textarea } from '../../common/FormsControls/FormsControls';
 import s from './MyPosts.module.css';
 import Post from './Post/Post';
 
@@ -25,41 +26,33 @@ const MyPosts = (props) => {
 
 const PostForm = (props) => {
 
+  const formik = useFormik({
+    initialValues: {
+      post: ''
+    },
+    onSubmit: (values, { resetForm }) => {
+      props.addNewPost(values);
+      resetForm();
+    }
+  })
+
   return (
-    <div>
-      <Formik
-        initialValues={{
-          post: '',
-        }}
-        onSubmit={(values, { resetForm }) => {
-          props.addNewPost(values);
-          resetForm();
-        }}
-      >
-        {({ values, handleChange, handleBlur, handleSubmit, dirty }) => (
-          <div>
-            <div>
-              <textarea
-                name={'post'}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.post}
-                placeholder={'Enter your post'}
-              />
-            </div>
-            <div>
-              <button
-                disabled={!dirty}
-                onClick={handleSubmit}
-                type={'submit'}
-              >
-                Add post
-              </button>
-            </div>
-          </div>
-        )}
-      </Formik>
-    </div>
+    <form onSubmit={formik.handleSubmit}>
+      <Textarea
+        name={'post'}
+        onBlur={formik.handleBlur}
+        onChange={formik.handleChange}
+        value={formik.values.post}
+        placeholder={'Enter your post'} />
+      <div>
+        <button
+          disabled={!formik.dirty}
+          type={'submit'}
+        >
+          Add post
+        </button>
+      </div>
+    </form>
   )
 }
 

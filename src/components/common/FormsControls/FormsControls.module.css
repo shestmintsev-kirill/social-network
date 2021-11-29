@@ -1,0 +1,46 @@
+.inputWrapper {
+  padding: 15px;
+  max-width: 350px;
+  border-radius: 15px;
+  border: 0;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+}
+
+.input {
+  width: 70%;
+  margin: 10px 0;
+  padding: 10px;
+  border: 0;
+  border-radius: 15px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+  margin-right: 10px;
+  outline: none;
+}
+
+.inputError {
+  box-shadow: 4px 4px 10px rgba(255, 24, 24, 0.15);
+  color: rgb(168, 0, 0);
+}
+
+.error {
+  font-size: 14px;
+  color: rgb(255, 110, 110);
+  margin: 0;
+}
+
+.textarea {
+  width: 300px;
+  resize: vertical;
+  padding: 15px;
+  border-radius: 15px;
+  border: 0;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.06);
+  height: 60px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.textarea:focus {
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+}

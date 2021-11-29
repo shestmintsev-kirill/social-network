@@ -49,7 +49,7 @@ export const addPost = (post) => ({ type: ADD_POST, post })
 export const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile })
 export const setStatus = (status) => ({ type: SET_STATUS, status })
 
-export const getAuthUserData = (userId) => (dispatch) => {
+export const getUserProfile = (userId) => (dispatch) => {
     profileAPI.getUserProfile(userId).then(data => {
         dispatch(setUserProfile(data));
     }).catch(err => console.warn(err));

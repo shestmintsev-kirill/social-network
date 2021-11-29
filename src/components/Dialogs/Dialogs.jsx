@@ -3,7 +3,8 @@ import s from './Dialogs.module.css';
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
 import { Redirect } from 'react-router';
-import { Formik } from 'formik';
+import { useFormik } from 'formik';
+import { Textarea } from '../common/FormsControls/FormsControls';
 
 const Dialogs = (props) => {
 
@@ -35,41 +36,33 @@ const Dialogs = (props) => {
 
 const MessageForm = (props) => {
 
+  const formik = useFormik({
+    initialValues: {
+      message: ''
+    },
+    onSubmit: (values, { resetForm }) => {
+      props.addNewMessage(values);
+      resetForm();
+    }
+  })
+
   return (
-    <div>
-      <Formik
-        initialValues={{
-          message: '',
-        }}
-        onSubmit={(values, { resetForm }) => {
-          props.addNewMessage(values);
-          resetForm();
-        }}
-      >
-        {({ values, handleChange, handleBlur, handleSubmit, dirty }) => (
-          <div>
-            <div>
-              <textarea
-                name={'message'}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.message}
-                placeholder={'Enter your message'}
-              />
-            </div>
-            <div>
-              <button
-                disabled={!dirty}
-                onClick={handleSubmit}
-                type={'submit'}
-              >
-                Send
-              </button>
-            </div>
-          </div>
-        )}
-      </Formik>
-    </div>
+    <form onSubmit={formik.handleSubmit}>
+      <Textarea
+        name={'message'}
+        onBlur={formik.handleBlur}
+        onChange={formik.handleChange}
+        value={formik.values.message}
+        placeholder={'Enter your message'} />
+      <div>
+        <button
+          disabled={!formik.dirty}
+          type={'submit'}
+        >
+          Send
+        </button>
+      </div>
+    </form>
   )
 }
 
