@@ -12,7 +12,6 @@ const MyPosts = (props) => {
   let addNewPost = (values) => {
     props.addPost(values.post);
   }
-
   return (
     <div className={s.postsBlock}>
       <h3>My posts</h3>

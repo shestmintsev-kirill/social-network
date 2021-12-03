@@ -51,7 +51,7 @@ const LoginForm = (props) => {
     },
     onSubmit: (values, { resetForm }) => {
       props.authLogin(values);
-      resetForm();
+      props.errorMessage && resetForm();
     },
     validationSchema: validationsSchema
   })
@@ -64,9 +64,7 @@ const LoginForm = (props) => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-
       <p style={{ color: 'red' }}>{props.errorMessage}</p>
-
       {
         loginInputs.map((input, index) => <Input
           key={index}
