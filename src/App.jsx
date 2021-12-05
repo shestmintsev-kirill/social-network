@@ -1,16 +1,20 @@
-import React from "react";
+import React, { Suspense } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
-import ProfileContainer from "./components/Profile/ProfileContainer";
-import { Route } from "react-router-dom";
-import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import UsersContainer from "./components/Users/UsersContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Login from "./components/Login/Login";
+import Preloader from "./components/common/Preloader/Preloader";
+import { Route } from "react-router-dom";
 import { initializeApp } from './redux/app-reducer'
 import { connect } from "react-redux";
 import { compose } from "redux";
-import Preloader from "./components/common/Preloader/Preloader";
+// import ProfileContainer from "./components/Profile/ProfileContainer";
+// import DialogsContainer from "./components/Dialogs/DialogsContainer";
+
+const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
+const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
+
 
 class App extends React.Component {
 
@@ -28,20 +32,22 @@ class App extends React.Component {
       <div className="app-wrapper" >
         <HeaderContainer />
         <Navbar />
-        <div className="app-wrapper-content">
-          <Route path="/dialogs">
-            <DialogsContainer />
-          </Route>
-          <Route path="/profile/:userId?">
-            <ProfileContainer />
-          </Route>
-          <Route path="/users">
-            <UsersContainer />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-        </div>
+        <main className="app-wrapper-content">
+          <Suspense fallback={<Preloader />}>
+            <Route path="/dialogs">
+              <DialogsContainer />
+            </Route>
+            <Route path="/profile/:userId?">
+              <ProfileContainer />
+            </Route>
+            <Route path="/users">
+              <UsersContainer />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+          </Suspense>
+        </main>
       </div>
     );
   }
