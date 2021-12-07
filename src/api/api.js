@@ -10,50 +10,80 @@ const instance = axios.create({
 });
 
 export const usersAPI = {
-  getUsers(currentPage = 1, pageSize = 10) {
-    return instance.get(`users`, {
+  async getUsers(currentPage = 1, pageSize = 10) {
+    const res = await instance.get(`users`, {
       params: {
         count: pageSize,
         page: currentPage
       }
     }
-    ).then(res => res.data)
+    );
+    return res.data;
   },
 
-  follow(id) {
-    return instance.post(`follow/${id}`, null).then(res => res.data)
+  async follow(id) {
+    const res = await instance.post(`follow/${id}`, null);
+    return res.data;
   },
 
-  unFollow(id) {
-    return instance.delete(`follow/${id}`).then(res => res.data)
+  async unFollow(id) {
+    const res = await instance.delete(`follow/${id}`);
+    return res.data;
   }
 }
 
 export const profileAPI = {
-  getUserProfile(id) {
-    return instance.get(`profile/${id}`).then(res => res.data)
+  async getUserProfile(id) {
+    const res = await instance.get(`profile/${id}`);
+    return res.data;
   },
 
-  getUserStatus(id) {
-    return instance.get(`profile/status/${id}`).then(res => res.data)
+  async getUserStatus(id) {
+    const res = await instance.get(`profile/status/${id}`);
+    return res.data;
   },
 
-  updateStatus(status) {
-    return instance.put(`profile/status/`, { status: status }).then(res => res.data)
-  }
+  async updateStatus(status) {
+    try {
+      const res = await instance.put(`profile/status/`, { status: status });
+      return res.data;
+    } catch (error) {
+      console.log(error)
+    }
+
+  },
+
+  async savePhoto(file) {
+    const formData = new FormData();
+    formData.append('image', file)
+    const res = await instance.put(`profile/photo`, formData);
+    return res.data;
+  },
+
+  async updateProfile(profile) {
+    const res = await instance.put(`profile`, { ...profile });
+    return res.data;
+  },
 }
 
 export const authAPI = {
-  me() {
-    return instance.get(`auth/me`).then(res => res.data)
+  async me() {
+    const res = await instance.get(`auth/me`);
+    return res.data;
   },
 
-  login(loginData) {
-    return instance.post('/auth/login', { ...loginData }).then(res => res.data)
+  async login(loginData) {
+    const res = await instance.post('/auth/login', { ...loginData });
+    return res.data;
   },
 
-  logout() {
-    return instance.delete('/auth/login').then(res => res.data)
+  async logout() {
+    const res = await instance.delete('/auth/login');
+    return res.data;
+  },
+
+  async getCaptcha() {
+    return await instance.delete('/security/get-captcha-url');
   }
 }
 

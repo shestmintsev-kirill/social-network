@@ -23,7 +23,7 @@ const Login = (props) => {
   return (
     <div>
       <h1>Login</h1>
-      <LoginForm authLogin={authLogin} errorMessage={props.errorMessage} />
+      <LoginForm authLogin={authLogin} errorMessage={props.errorMessage} captcha={props.captcha} />
     </div>
   )
 }
@@ -39,7 +39,9 @@ const LoginForm = (props) => {
       .required("Пароль обязателен"),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password')], 'Пароли не совпадают')
-      .required("Подтверждение пароля обязательно")
+      .required("Подтверждение пароля обязательно"),
+    captcha: props.captcha && Yup.string()
+      .required("Поле обязательно")
   })
 
   const formik = useFormik({
@@ -47,11 +49,13 @@ const LoginForm = (props) => {
       email: '',
       password: '',
       confirmPassword: '',
+      captcha: '',
       rememberMe: false
     },
     onSubmit: (values, { resetForm }) => {
       props.authLogin(values);
-      props.errorMessage && resetForm();
+      values.captcha = ''
+      // props.errorMessage && resetForm();
     },
     validationSchema: validationsSchema
   })
@@ -64,7 +68,6 @@ const LoginForm = (props) => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <p style={{ color: 'red' }}>{props.errorMessage}</p>
       {
         loginInputs.map((input, index) => <Input
           key={index}
@@ -81,15 +84,27 @@ const LoginForm = (props) => {
       }
       <div>
         <input
-          value={formik.values.rememberMe}
+          checked={formik.values.rememberMe}
           name={'rememberMe'}
           onChange={formik.handleChange}
           type={'checkbox'}
         /> remember me
       </div>
+      {props.captcha && <div>
+        <img src={props.captcha} alt="captcha" />
+        <Input
+          type="text"
+          name={'captcha'}
+          value={formik.values.captcha}
+          onBlur={formik.handleBlur}
+          onChange={formik.handleChange}
+          placeholder={'input captcha'}
+        />
+      </div>}
       <div>
+        <p style={{ color: 'red' }}>{props.errorMessage}</p>
         <button
-          disabled={!formik.isValid && !formik.dirty}
+          disabled={!formik.dirty || !formik.isValid}
           type={'submit'}
         >
           Login
@@ -99,6 +114,6 @@ const LoginForm = (props) => {
   )
 }
 
-const mapStateToProps = (state) => ({ isAuth: state.auth.isAuth, errorMessage: state.auth.errorMessage })
+const mapStateToProps = (state) => ({ isAuth: state.auth.isAuth, errorMessage: state.auth.errorMessage, captcha: state.auth.captcha })
 
 export default connect(mapStateToProps, { login })(Login)

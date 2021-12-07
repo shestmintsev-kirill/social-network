@@ -7,6 +7,10 @@
   margin-bottom: 10px;
 }
 
+.inputWrapperLow .input {
+  margin: 15px 0;
+}
+
 .input {
   width: 70%;
   margin: 10px 0;

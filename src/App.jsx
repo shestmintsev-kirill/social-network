@@ -5,10 +5,9 @@ import UsersContainer from "./components/Users/UsersContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Login from "./components/Login/Login";
 import Preloader from "./components/common/Preloader/Preloader";
-import { Route } from "react-router-dom";
+import { Route, Redirect, Switch } from "react-router-dom";
 import { initializeApp } from './redux/app-reducer'
 import { connect } from "react-redux";
-import { compose } from "redux";
 // import ProfileContainer from "./components/Profile/ProfileContainer";
 // import DialogsContainer from "./components/Dialogs/DialogsContainer";
 
@@ -34,18 +33,26 @@ class App extends React.Component {
         <Navbar />
         <main className="app-wrapper-content">
           <Suspense fallback={<Preloader />}>
-            <Route path="/dialogs">
-              <DialogsContainer />
-            </Route>
-            <Route path="/profile/:userId?">
-              <ProfileContainer />
-            </Route>
-            <Route path="/users">
-              <UsersContainer />
-            </Route>
-            <Route path="/login">
-              <Login />
-            </Route>
+            <Switch>
+              <Route exact path="/">
+                <Redirect from='/' to="/profile" />
+              </Route>
+              <Route path="/dialogs">
+                <DialogsContainer />
+              </Route>
+              <Route path="/profile/:userId?">
+                <ProfileContainer />
+              </Route>
+              <Route path="/users">
+                <UsersContainer />
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="*">
+                <div>404 not found</div>
+              </Route>
+            </Switch>
           </Suspense>
         </main>
       </div>
@@ -57,4 +64,4 @@ const mapStateToProps = (state) => ({
   initialized: state.app.initialized
 })
 
-export default compose(connect(mapStateToProps, { initializeApp }))(App);
+export default connect(mapStateToProps, { initializeApp })(App);

@@ -27,7 +27,6 @@ const Pagination = ({ portionSize = 10, ...props }) => {
     setPortionNumber(1)
     props.onPageChanged(1)
   }
-
   const nextPage = () => {
     if (props.currentPage + 1 > rightPortionPageNumber) {
       setPortionNumber(potrionNumber + 1)
