@@ -1,11 +1,11 @@
 import { profileAPI } from "../api/api";
 
-const ADD_POST = 'ADD_POST';
-const SET_USER_PROFILE = 'SET_USER_PROFILE';
-const SET_STATUS = 'SET_STATUS';
-const DELETE_POST = 'DELETE_POST';
-const SEVE_PHOTO_SUCCESS = 'SEVE_PHOTO_SUCCESS';
-const SET_ERROR = 'SET_ERROR';
+const ADD_POST = 'network/profile/ADD_POST';
+const SET_USER_PROFILE = 'network/profile/SET_USER_PROFILE';
+const SET_STATUS = 'network/profile/SET_STATUS';
+const DELETE_POST = 'network/profile/DELETE_POST';
+const SEVE_PHOTO_SUCCESS = 'network/profile/SEVE_PHOTO_SUCCESS';
+const SET_ERROR = 'network/profile/SET_ERROR';
 
 let initialState = {
     posts: [
