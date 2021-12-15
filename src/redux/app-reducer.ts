@@ -2,11 +2,15 @@ import { getAuthUserData } from "./auth-reducer";
 
 const SET_INITIALIZE = 'network/app/SET_INITIALIZE';
 
-let initialState = {
+export type InitialStateType = {
+    initialized: boolean
+}
+
+let initialState:InitialStateType = {
     initialized: false
 };
 
-const appReducer = (state = initialState, action) => {
+const appReducer = (state = initialState, action: any):InitialStateType => {
     switch (action.type) {
         case SET_INITIALIZE:
             return {
@@ -18,9 +22,13 @@ const appReducer = (state = initialState, action) => {
     }
 }
 
-export const setInitializedSuccess = () => ({ type: SET_INITIALIZE })
+type SetInitializedSuccsessActionType = {
+    type: typeof SET_INITIALIZE
+}
 
-export const initializeApp = () => async (dispatch) => {
+export const setInitializedSuccess = ():SetInitializedSuccsessActionType => ({ type: SET_INITIALIZE })
+
+export const initializeApp = () => async (dispatch: any) => {
     await dispatch(getAuthUserData());
     dispatch(setInitializedSuccess());
 
