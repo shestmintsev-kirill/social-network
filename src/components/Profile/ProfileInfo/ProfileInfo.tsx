@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { ProfileType } from '../../../types/types';
 import Preloader from '../../common/Preloader/Preloader';
 import ProfileDescriptionForm from './ProfileDescriptionForm';
 import s from './ProfileInfo.module.css';
 import ProfileStatus from './ProfileStatus';
 
-const ProfileInfo = ({ profile, status, updateStatus, isOwner, savePhoto, updateProfile, authorizedUserId, errors }) => {
+type ProfileInfoPropsType = {
+  profile: ProfileType,
+  status: string,
+  isOwner: boolean,
+  authorizedUserId: number,
+  errors: Array<string>,
+  updateStatus: (status:string) => void,
+  savePhoto: (file:any) => void,
+  updateProfile: (payload: ProfileType) => void,
+}
 
+const ProfileInfo:React.FC<ProfileInfoPropsType> = ({ profile, status, updateStatus, isOwner, savePhoto, updateProfile, authorizedUserId, errors }) => {
   const [editMode, setEditMode] = useState(false)
 
   useEffect(() => {
@@ -14,7 +25,7 @@ const ProfileInfo = ({ profile, status, updateStatus, isOwner, savePhoto, update
     }
   }, [errors, authorizedUserId])
 
-  const onMainPhotoSelected = (e) => {
+  const onMainPhotoSelected = (e:any) => {
     if (e.target.files.length) {
       savePhoto(e.target.files[0])
     }
@@ -56,9 +67,15 @@ const ProfileInfo = ({ profile, status, updateStatus, isOwner, savePhoto, update
   );
 }
 
-const ProfileDescription = ({ profile, isOwner, goToEditMode }) => {
+type ProfileDescriptionPropsType = {
+  profile: ProfileType,
+  isOwner: boolean,
+  goToEditMode: () => void
+}
 
-  let profileContacts = Object.entries(profile?.contacts).map((contact, index) => {
+const ProfileDescription:React.FC<ProfileDescriptionPropsType> = ({ profile, isOwner, goToEditMode }) => {
+
+  let profileContacts = Object.entries(profile?.contacts).map((contact:Array<string>, index:number) => {
     return contact[1]
       ? <li key={index}><strong>{contact[0]}: </strong>{contact[1]}</li>
       : false

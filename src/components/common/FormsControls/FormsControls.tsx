@@ -1,6 +1,19 @@
 import s from './FormsControls.module.css'
 
-export const Input = (props) => {
+type InputPropsType = {
+  name: string,
+  placeholder: string,
+  title?: string,
+  value: any,
+  htmlFor?: string,
+  type?: string,
+  touched?: any
+  errors?: any,
+  isError?: any,
+  onBlur?: any,
+  onChange: any
+}
+export const Input:React.FC<InputPropsType> = (props) => {
   return (
     <div className={s.inputWrapper}>
       <label htmlFor={props.htmlFor}>{props.title}</label><br />
@@ -18,7 +31,7 @@ export const Input = (props) => {
   )
 }
 
-export const InputLow = (props) => {
+export const InputLow:React.FC<InputPropsType> = (props) => {
   return (
     <div className={s.inputWrapperLow}>
       <label htmlFor={props.htmlFor} style={{ color: props.isError && 'red' }}>{props.title}</label><br />
@@ -36,7 +49,14 @@ export const InputLow = (props) => {
   )
 }
 
-export const Textarea = (props) => {
+type TextareaPropsType = {
+  name: string,
+  onBlur: any,
+  onChange: any
+  placeholder: string,
+  value: string
+}
+export const Textarea:React.FC<TextareaPropsType> = (props) => {
   return (
     <div>
       <textarea className={s.textarea} {...props} />

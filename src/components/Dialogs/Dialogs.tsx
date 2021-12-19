@@ -2,22 +2,25 @@ import React from 'react';
 import s from './Dialogs.module.css';
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
-import { Redirect } from 'react-router';
 import { useFormik } from 'formik';
 import { Textarea } from '../common/FormsControls/FormsControls';
+import { DialogType, InitialDialogsStateType, MessageType } from '../../redux/dialogs-reducer';
 
-const Dialogs = (props) => {
+type DialogsPropsType = {
+  dialogsPage:InitialDialogsStateType,
+  sendMessage: (message:string) => void
+}
+
+const Dialogs:React.FC<DialogsPropsType> = (props) => {
 
   let state = props.dialogsPage;
 
-  let dialogsElements = state.dialogs.map(d => <DialogItem name={d.name} id={d.id} key={d.id} />);
-  let messagesElements = state.messages.map((m, i) => <Message message={m.message} key={i} />);
+  let dialogsElements = state.dialogs.map((d:DialogType) => <DialogItem name={d.name} id={d.id} key={d.id} />);
+  let messagesElements = state.messages.map((m:MessageType, i:number) => <Message message={m.message} key={i} />);
 
-  let addNewMessage = (values) => {
+  let addNewMessage = (values:MessageValuesType) => {
     props.sendMessage(values.message);
   }
-
-  if (!props.isAuth) return <Redirect to={'./login'} />
 
   return (
     <div className={s.dialogs}>
@@ -34,13 +37,21 @@ const Dialogs = (props) => {
   )
 }
 
-const MessageForm = (props) => {
+type MessageValuesType = {
+  message: string
+}
+
+type MessageFormPropsType = {
+  addNewMessage: (values:MessageValuesType) => void
+}
+
+const MessageForm:React.FC<MessageFormPropsType> = (props) => {
 
   const formik = useFormik({
     initialValues: {
       message: ''
     },
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: (values:MessageValuesType, { resetForm }) => {
       props.addNewMessage(values);
       resetForm();
     }

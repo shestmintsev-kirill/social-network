@@ -1,10 +1,27 @@
 import { useFormik } from "formik"
+import { ContactsType, ProfileType } from "../../../types/types"
 import { Input, InputLow } from "../../common/FormsControls/FormsControls"
 
-const ProfileDescriptionForm = ({ profile, closeEditMode, updateProfile, authorizedUserId, errors }) => {
+type ProfileDescriptionFormPropsType = {
+  profile: ProfileType,
+  authorizedUserId: number,
+  errors: Array<string>
+  updateProfile: (payload: ProfileType) => void,
+  closeEditMode: () => void
+}
 
-  const examValue = (value) => {
-    return value ? value : '';
+type ProfileDescriptionFormValuesType = {
+  fullName: string
+  aboutMe: string
+  lookingForAJob: boolean
+  lookingForAJobDescription: string
+  contacts: ContactsType
+}
+
+const ProfileDescriptionForm:React.FC<ProfileDescriptionFormPropsType> = ({ profile, closeEditMode, updateProfile, authorizedUserId, errors }) => {
+
+  const examValue = (value:string) => {
+    return value.length ? value : '';
   }
 
   const formik = useFormik({
@@ -24,7 +41,7 @@ const ProfileDescriptionForm = ({ profile, closeEditMode, updateProfile, authori
         youtube: examValue(profile.contacts.youtube),
       },
     },
-    onSubmit: async (values) => {
+    onSubmit: async (values:ProfileDescriptionFormValuesType) => {
       await updateProfile({ ...values, userId: authorizedUserId });
       closeEditMode();
     }
@@ -69,13 +86,21 @@ const ProfileDescriptionForm = ({ profile, closeEditMode, updateProfile, authori
           Send
         </button>
       </div>
-      {!!errors.length && errors.map((err, index) => <div key={index} style={{ color: 'red' }}><strong>Ошибка: </strong>{err}</div>)}
+      {!!errors.length && errors.map((err:string, index:number) => <div key={index} style={{ color: 'red' }}><strong>Ошибка: </strong>{err}</div>)}
     </form>
   )
 }
 
-const Contacts = ({ contacts, onChange, errors }) => {
-  let err = errors.map(e => {
+
+type ContactsPropsType = {
+  contacts: any,
+  onChange: any,
+  errors: Array<string>
+}
+
+const Contacts:React.FC<ContactsPropsType> = ({ contacts, onChange, errors }) => {
+  console.log(contacts, onChange, errors)
+  let err = errors.map((e:string) => {
     return e.split('->')[1].replace(')', '').toLowerCase()
   })
 
@@ -85,10 +110,10 @@ const Contacts = ({ contacts, onChange, errors }) => {
         <InputLow
           key={contact}
           title={contact}
-          isError={err.some(e => e === contact.toLowerCase())}
+          isError={err.some((e:string) => e === contact.toLowerCase())}
           name={`contacts.${contact}`}
           onChange={onChange}
-          value={contacts[`${contact}`]}
+          value={contacts[contact]}
           placeholder={contact}
         />
       )}

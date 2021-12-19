@@ -1,15 +1,19 @@
 import { useFormik } from 'formik';
-import React from 'react';
+import { PostType } from '../../../types/types';
 import { Textarea } from '../../common/FormsControls/FormsControls';
 import s from './MyPosts.module.css';
 import Post from './Post/Post';
 
-
-const MyPosts = (props) => {
+type MyPostsPropsType = {
+  posts: Array<PostType>,
+  newPostText: string,
+  addPost: (post:string) => void
+}
+const MyPosts:React.FC<MyPostsPropsType> = (props) => {
   let postsElements =
-    props.posts.map((p, i) => <Post message={p.message} likesCount={p.likesCount} key={i} />);
+    props.posts.map((p:PostType, i:number) => <Post message={p.message} likesCount={p.likesCount} key={i} />);
 
-  let addNewPost = (values) => {
+  let addNewPost = (values:PostFormValues) => {
     props.addPost(values.post);
   }
   return (
@@ -23,13 +27,20 @@ const MyPosts = (props) => {
   );
 }
 
-const PostForm = (props) => {
+type PostFormValues = {
+  post: string
+}
 
+type PostFormPropsType = {
+  addNewPost: (values:PostFormValues) => void
+}
+
+const PostForm:React.FC<PostFormPropsType> = (props) => {
   const formik = useFormik({
     initialValues: {
       post: ''
     },
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: (values:PostFormValues, { resetForm }) => {
       props.addNewPost(values);
       resetForm();
     }

@@ -1,8 +1,13 @@
-import React from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import s from './Header.module.css';
 
-const Header = (props) => {
+type PropsType = {
+    isAuth: boolean,
+    login: string | null,
+    logout: () => void
+}
+
+const Header:React.FC<PropsType> = (props) => {
     let history = useHistory();
 
     const getLogout = async () => {

@@ -4,13 +4,34 @@ import { login } from '../../redux/auth-reducer'
 import * as Yup from "yup";
 import { Input } from "../common/FormsControls/FormsControls";
 import { Redirect } from "react-router";
+import { AppStateType } from "../../redux/redux-store";
 
-const Login = (props) => {
+type MapStateLoginPropsType = {
+  captcha: string | null
+  errorMessage: string | null
+  isAuth: boolean
+}
+
+type LoginDataType = {
+  email: string,
+  password: string,
+  captcha: string,
+  rememberMe: boolean
+}
+type MapDispatchLoginPropsType = {
+  login: (loginData:LoginDataType) => void
+}
+
+type OwnPropsType = {} //standart props
+
+type LoginPropsType = MapStateLoginPropsType & MapDispatchLoginPropsType & OwnPropsType
+
+const Login:React.FC<LoginPropsType> = (props) => {
   if (props.isAuth) {
     return <Redirect to={'/profile'} />
   }
 
-  let authLogin = (values) => {
+  let authLogin = (values:LoginValuesType) => {
     const loginData = { ...values }
     for (let value in loginData) {
       if (value === 'confirmPassword') {
@@ -28,7 +49,21 @@ const Login = (props) => {
   )
 }
 
-const LoginForm = (props) => {
+export interface LoginValuesType {
+  email: string,
+  password: string,
+  confirmPassword?: string,
+  captcha: string,
+  rememberMe: boolean
+}
+
+
+type LoginFormPropsType = {
+  errorMessage: string | null,
+  captcha: string | null,
+  authLogin: (values: LoginValuesType) => void
+}
+const LoginForm:React.FC<LoginFormPropsType> = (props:any) => {
   const validationsSchema = Yup.object().shape({
     email: Yup.string()
       .email("Не валидный email")
@@ -52,7 +87,7 @@ const LoginForm = (props) => {
       captcha: '',
       rememberMe: false
     },
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: (values:any, { resetForm }) => {
       props.authLogin(values);
       values.captcha = ''
       // props.errorMessage && resetForm();
@@ -114,6 +149,6 @@ const LoginForm = (props) => {
   )
 }
 
-const mapStateToProps = (state) => ({ isAuth: state.auth.isAuth, errorMessage: state.auth.errorMessage, captcha: state.auth.captcha })
+const mapStateToProps = (state:AppStateType) => ({ isAuth: state.auth.isAuth, errorMessage: state.auth.errorMessage, captcha: state.auth.captcha })
 
-export default connect(mapStateToProps, { login })(Login)
+export default connect<MapStateLoginPropsType, MapDispatchLoginPropsType, OwnPropsType, AppStateType>(mapStateToProps, { login })(Login)
