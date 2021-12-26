@@ -1,4 +1,5 @@
-import { authAPI, ResultCodeEnum, ResultCodeForCaptcha } from "../api/api";
+import { ResultCodeEnum, ResultCodeForCaptcha } from "../api/api";
+import { authAPI } from "../api/auth-api";
 
 const SET_USER_DATA = 'network/auth/SET_USER_DATA';
 const SET_ERROR = 'network/auth/SET_ERROR';
@@ -99,8 +100,8 @@ export const login = (loginData:loginData) => async (dispatch:any) => {
         dispatch(getAuthUserData());
     } else {
         dispatch(setError(data.messages.length ? data.messages[0] : 'Some error'));
-        !data.fieldsErrors.length && dispatch(setCaptcha(null))
-        if (data.resultCode === ResultCodeForCaptcha.CaptchaIsRequired && data.fieldsErrors.length) {
+        !data?.fieldsErrors?.length && dispatch(setCaptcha(null))
+        if (data.resultCode === ResultCodeForCaptcha.CaptchaIsRequired && data?.fieldsErrors?.length) {
             dispatch(getCaptcha());
         }
     }

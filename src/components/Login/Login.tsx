@@ -18,15 +18,12 @@ type LoginDataType = {
   captcha: string,
   rememberMe: boolean
 }
+
 type MapDispatchLoginPropsType = {
   login: (loginData:LoginDataType) => void
 }
 
-type OwnPropsType = {} //standart props
-
-type LoginPropsType = MapStateLoginPropsType & MapDispatchLoginPropsType & OwnPropsType
-
-const Login:React.FC<LoginPropsType> = (props) => {
+const Login:React.FC<MapStateLoginPropsType & MapDispatchLoginPropsType> = (props) => {
   if (props.isAuth) {
     return <Redirect to={'/profile'} />
   }
@@ -57,13 +54,12 @@ export interface LoginValuesType {
   rememberMe: boolean
 }
 
-
-type LoginFormPropsType = {
-  errorMessage: string | null,
-  captcha: string | null,
-  authLogin: (values: LoginValuesType) => void
-}
-const LoginForm:React.FC<LoginFormPropsType> = (props:any) => {
+// type LoginFormPropsType = {
+//   errorMessage: string | null,
+//   captcha: string | null,
+//   authLogin: (values: LoginValuesType) => void
+// }
+const LoginForm:React.FC<any> = (props) => {
   const validationsSchema = Yup.object().shape({
     email: Yup.string()
       .email("Не валидный email")
@@ -151,4 +147,4 @@ const LoginForm:React.FC<LoginFormPropsType> = (props:any) => {
 
 const mapStateToProps = (state:AppStateType) => ({ isAuth: state.auth.isAuth, errorMessage: state.auth.errorMessage, captcha: state.auth.captcha })
 
-export default connect<MapStateLoginPropsType, MapDispatchLoginPropsType, OwnPropsType, AppStateType>(mapStateToProps, { login })(Login)
+export default connect<MapStateLoginPropsType, MapDispatchLoginPropsType, unknown, AppStateType>(mapStateToProps, { login })(Login)

@@ -1,5 +1,5 @@
+import { profileAPI } from '../api/profile-api';
 import { PostType, ProfileType, PhotosType } from './../types/types';
-import { profileAPI } from "../api/api";
 
 const ADD_POST = 'network/profile/ADD_POST';
 const SET_USER_PROFILE = 'network/profile/SET_USER_PROFILE';
