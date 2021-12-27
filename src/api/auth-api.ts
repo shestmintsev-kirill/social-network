@@ -1,5 +1,5 @@
 import { loginData } from './../redux/auth-reducer';
-import { instance, ResponseType } from "./api";
+import { instance, APIResponseType } from "./api";
 
 export type MeResponseDataType = {
   id: number,
@@ -17,12 +17,12 @@ export type LoginResponseType = {
 
 export const authAPI = {
   async me() {
-    const res = await instance.get<ResponseType<MeResponseDataType>>(`auth/me`);
+    const res = await instance.get<APIResponseType<MeResponseDataType>>(`auth/me`);
     return res.data;
   },
 
   async login(loginData:loginData) {
-    const res = await instance.post<ResponseType<LoginResponseType>>('/auth/login', { ...loginData });
+    const res = await instance.post<APIResponseType<LoginResponseType>>('/auth/login', { ...loginData });
     return res.data;
   },
 
