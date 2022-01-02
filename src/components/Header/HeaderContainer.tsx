@@ -12,9 +12,7 @@ type MapDispatchPropsType = {
     logout: () => void
 }
 
-type PropsType = MapStatePropsType & MapDispatchPropsType
-
-const HeaderContainer:React.FC<PropsType> = (props) => {
+const HeaderContainer:React.FC<MapStatePropsType & MapDispatchPropsType> = (props) => {
     return (
         <Header {...props} />
     )

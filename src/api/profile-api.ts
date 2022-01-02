@@ -21,7 +21,7 @@ export const profileAPI = {
     return res.data;
   },
 
-  async savePhoto(file:any) {
+  async savePhoto(file:File) {
     const formData = new FormData();
     formData.append('image', file)
     const res = await instance.put<APIResponseType<SavePhotoResponseType>>(`profile/photo`, formData);

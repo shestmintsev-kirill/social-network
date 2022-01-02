@@ -8,21 +8,23 @@ import Preloader from "./components/common/Preloader/Preloader";
 import { Route, Redirect, Switch } from "react-router-dom";
 import { initializeApp } from './redux/app-reducer'
 import { connect } from "react-redux";
-// import ProfileContainer from "./components/Profile/ProfileContainer";
-// import DialogsContainer from "./components/Dialogs/DialogsContainer";
+import { AppStateType } from "./redux/redux-store";
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
 
 
-class App extends React.Component {
+type MapProprsType = ReturnType<typeof mapStateToProps>
+type DispatchPropsType = {
+  initializeApp: () => void
+}
 
+class App extends React.Component<MapProprsType & DispatchPropsType> {
   componentDidMount() {
     this.props.initializeApp();
   }
 
   render() {
-
     if (!this.props.initialized) {
       return <Preloader />
     }
@@ -60,7 +62,7 @@ class App extends React.Component {
   }
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state:AppStateType) => ({
   initialized: state.app.initialized
 })
 

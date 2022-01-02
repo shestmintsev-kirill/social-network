@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { ProfileType } from '../../../types/types';
 import Preloader from '../../common/Preloader/Preloader';
 import ProfileDescriptionForm from './ProfileDescriptionForm';
@@ -12,7 +12,7 @@ type ProfileInfoPropsType = {
   authorizedUserId: number,
   errors: Array<string>,
   updateStatus: (status:string) => void,
-  savePhoto: (file:any) => void,
+  savePhoto: (file:File) => void,
   updateProfile: (payload: ProfileType) => void,
 }
 
@@ -25,8 +25,8 @@ const ProfileInfo:React.FC<ProfileInfoPropsType> = ({ profile, status, updateSta
     }
   }, [errors, authorizedUserId])
 
-  const onMainPhotoSelected = (e:any) => {
-    if (e.target.files.length) {
+  const onMainPhotoSelected = (e:ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.length) {
       savePhoto(e.target.files[0])
     }
   }

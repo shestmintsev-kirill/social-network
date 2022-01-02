@@ -1,12 +1,6 @@
+import { BaseThunkType, InferActionsTypes } from './redux-store';
 import { profileAPI } from '../api/profile-api';
 import { PostType, ProfileType, PhotosType } from './../types/types';
-
-const ADD_POST = 'network/profile/ADD_POST';
-const SET_USER_PROFILE = 'network/profile/SET_USER_PROFILE';
-const SET_STATUS = 'network/profile/SET_STATUS';
-const DELETE_POST = 'network/profile/DELETE_POST';
-const SEVE_PHOTO_SUCCESS = 'network/profile/SEVE_PHOTO_SUCCESS';
-const SET_ERROR = 'network/profile/SET_ERROR';
 
 let initialState = {
     posts: [
@@ -18,14 +12,12 @@ let initialState = {
     newPostText: 'it-kamasutra.com' as string,
     profile: null as ProfileType | null,
     status: '' as string,
-    errors: []
+    errors: [] as Array<string>
 };
 
-export type InitialStateType = typeof initialState
-
-const profileReducer = (state = initialState, action:any):InitialStateType => {
+const profileReducer = (state = initialState, action:ActionsTypes):InitialStateType => {
     switch (action.type) {
-        case ADD_POST:
+        case 'SN/PROFILE/ADD_POST':
             let newPost = {
                 id: 5,
                 message: action.post,
@@ -36,27 +28,27 @@ const profileReducer = (state = initialState, action:any):InitialStateType => {
                 posts: [...state.posts, newPost],
                 newPostText: ''
             }
-        case SET_USER_PROFILE:
+        case 'SN/PROFILE/SET_USER_PROFILE':
             return {
                 ...state,
                 profile: action.profile
             }
-        case SET_STATUS:
+        case 'SN/PROFILE/SET_STATUS':
             return {
                 ...state,
                 status: action.status
             }
-        case SEVE_PHOTO_SUCCESS:
+        case 'SN/PROFILE/SEVE_PHOTO_SUCCESS':
             return {
                 ...state,
                 profile: { ...state.profile, photos: action.photos } as ProfileType
             }
-        case SET_ERROR:
+        case 'SN/PROFILE/SET_ERROR':
             return {
                 ...state,
                 errors: action.err
             }
-        case DELETE_POST:
+        case 'SN/PROFILE/DELETE_POST':
             return {
                 ...state,
                 posts: state.posts.filter(p => p.id !== action.postId)
@@ -66,74 +58,52 @@ const profileReducer = (state = initialState, action:any):InitialStateType => {
     }
 }
 
-type AddPostActionType = {
-    type: typeof ADD_POST,
-    post: string
+export const actions = {
+    addPost: (post:string) => ({ type: 'SN/PROFILE/ADD_POST', post } as const),
+    setUserProfile: (profile:ProfileType) => ({ type: 'SN/PROFILE/SET_USER_PROFILE', profile } as const),
+    setStatus: (status:string) => ({ type: 'SN/PROFILE/SET_STATUS', status } as const),
+    deletePost: (postId:number) => ({ type: 'SN/PROFILE/DELETE_POST', postId } as const),
+    savePhotoSuccess: (photos:PhotosType) => ({ type: 'SN/PROFILE/SEVE_PHOTO_SUCCESS', photos } as const),
+    setError: (err:Array<string>) => ({ type: 'SN/PROFILE/SET_ERROR', err } as const)
 }
-export const addPost = (post:string):AddPostActionType => ({ type: ADD_POST, post })
 
-type SetUserProfileActionType = {
-    type: typeof SET_USER_PROFILE,
-    profile: ProfileType
-}
-export const setUserProfile = (profile:ProfileType):SetUserProfileActionType => ({ type: SET_USER_PROFILE, profile })
-
-type SetStatusActionType = {
-    type: typeof SET_STATUS,
-    status: string
-}
-export const setStatus = (status:string):SetStatusActionType => ({ type: SET_STATUS, status })
-
-type DeletePostActionType = {
-    type: typeof DELETE_POST,
-    postId: number
-}
-export const deletePost = (postId:number):DeletePostActionType => ({ type: DELETE_POST, postId })
-
-type SavePhotoSuccessActionType = {
-    type: typeof SEVE_PHOTO_SUCCESS,
-    photos: PhotosType
-}
-export const savePhotoSuccess = (photos:PhotosType):SavePhotoSuccessActionType => ({ type: SEVE_PHOTO_SUCCESS, photos })
-
-type SetErroActionType = {
-    type: typeof SET_ERROR,
-    err: Array<string>
-}
-export const setError = (err:Array<string>):SetErroActionType => ({ type: SET_ERROR, err })
-
-export const getUserProfile = (userId:number) => async (dispatch:any) => {
+export const getUserProfile = (userId:number):ThunkType=> async (dispatch) => {
     const data = await profileAPI.getUserProfile(userId)
-    dispatch(setUserProfile(data));
+    dispatch(actions.setUserProfile(data));
 }
 
-export const getStatus = (userId:number) => async (dispatch:any) => {
+export const getStatus = (userId:number):ThunkType => async (dispatch) => {
     const data = await profileAPI.getUserStatus(userId)
-    dispatch(setStatus(data));
+    dispatch(actions.setStatus(data));
 }
 
-export const updateStatus = (status:string) => async (dispatch:any) => {
+export const updateStatus = (status:string):ThunkType => async (dispatch) => {
     const data = await profileAPI.updateStatus(status)
     if (data.resultCode === 0) {
-        dispatch(setStatus(status));
+        dispatch(actions.setStatus(status));
     }
 }
 
-export const savePhoto = (file:any) => async (dispatch:any) => {
+export const savePhoto = (file:File):ThunkType => async (dispatch) => {
     const data = await profileAPI.savePhoto(file)
     if (data.resultCode === 0) {
-        dispatch(savePhotoSuccess(data.data.photos));
+        dispatch(actions.savePhotoSuccess(data.data.photos));
     }
 }
 
-export const updateProfile = (profileData: ProfileType) => async (dispatch:any) => {
+export const updateProfile = (profileData: ProfileType):ThunkType => async (dispatch) => {
     const data = await profileAPI.updateProfile(profileData);
     if (data.resultCode === 0) {
         dispatch(getUserProfile(profileData.userId));
-        dispatch(setError([]))
+        dispatch(actions.setError([]))
     } else {
-        dispatch(setError(data.messages))
+        dispatch(actions.setError(data.messages))
     }
 }
+
+
+export type InitialStateType = typeof initialState
+type ActionsTypes = InferActionsTypes<typeof actions>
+type ThunkType = BaseThunkType<ActionsTypes>
 
 export default profileReducer;

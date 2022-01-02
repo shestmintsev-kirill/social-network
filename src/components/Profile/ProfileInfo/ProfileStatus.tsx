@@ -3,20 +3,20 @@ import React, { useEffect, useState } from "react";
 
 type PropsType = {
   status: string,
-  isOwner: boolean
-  updateStatus: (status:string) => void
+  isOwner?: boolean
+  updateStatus?: (status:string) => void
 }
-const ProfileStatus:React.FC<PropsType>= (props) => {
+const ProfileStatus:React.FC<PropsType>= ({status, isOwner = false, updateStatus = (x) => x}) => {
 
   let [editMode, setEditMode] = useState(false);
-  let [status, setStatus] = useState(props.status);
+  let [profileStatus, setStatus] = useState(status);
 
   useEffect(() => {
-    setStatus(props.status)
-  }, [props.status])
+    setStatus(status)
+  }, [status])
 
   const activateEditMode = () => {
-    if (!props.isOwner) {
+    if (!isOwner) {
       return
     }
     setEditMode(true);
@@ -24,7 +24,7 @@ const ProfileStatus:React.FC<PropsType>= (props) => {
 
   const deactivateEditMode = () => {
     setEditMode(false);
-    props.updateStatus(status);
+    updateStatus(profileStatus);
   }
 
   const onStatusChange = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -35,10 +35,10 @@ const ProfileStatus:React.FC<PropsType>= (props) => {
     <div>
       {editMode
         ? <div>
-          Статус: <input onChange={onStatusChange} onBlur={deactivateEditMode} autoFocus type="text" value={status} />
+          Статус: <input onChange={onStatusChange} onBlur={deactivateEditMode} autoFocus type="text" value={profileStatus} />
         </div>
         : <div>
-          <span onDoubleClick={activateEditMode}><strong>Статус:</strong> {props.status || 'Нет статуса'}</span>
+          <span onDoubleClick={activateEditMode}><strong>Статус:</strong> {status || 'Нет статуса'}</span>
         </div>
       }
     </div >

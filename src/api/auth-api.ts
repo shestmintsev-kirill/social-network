@@ -7,7 +7,7 @@ export type MeResponseDataType = {
   login: string
 }
 
-export type GetCaptchaType = {
+export type GetCaptchaResponseType = {
   url: string
 }
 
@@ -32,6 +32,6 @@ export const authAPI = {
   },
 
   async getCaptcha() {
-    return await instance.delete<GetCaptchaType>('/security/get-captcha-url');
+    return await instance.delete<GetCaptchaResponseType>('/security/get-captcha-url');
   }
 }
