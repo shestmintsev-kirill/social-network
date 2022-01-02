@@ -5,11 +5,11 @@ import App from './App';
 import store from './redux/redux-store';
 
 test('renders learn react link', () => {
-  render(
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>
-  );
+    render(
+        <BrowserRouter>
+            <Provider store={store}>
+                <App />
+            </Provider>
+        </BrowserRouter>,
+    );
 });
