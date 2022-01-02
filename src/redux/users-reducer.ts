@@ -10,7 +10,7 @@ const initialState = {
     totalUsersCount: 0,
     currentPage: 1,
     isFetching: false,
-    followingInProgress: [] as Array<number>, //array of users ids
+    followingInProgress: [] as Array<number> //array of users ids
 };
 
 const usersReducer = (state = initialState, action: ActionsTypes): UsersInitialStateType => {
@@ -23,34 +23,34 @@ const usersReducer = (state = initialState, action: ActionsTypes): UsersInitialS
                         return { ...user, followed: action.followedStatus };
                     }
                     return user;
-                }),
+                })
             };
         case 'SN/USERS/SET_USERS':
             return {
                 ...state,
-                users: [...action.users],
+                users: [...action.users]
             };
         case 'SN/USERS/SET_CURRENT_PAGE':
             return {
                 ...state,
-                currentPage: action.page,
+                currentPage: action.page
             };
         case 'SN/USERS/SET_TOTAL_USERS_COUNT':
             return {
                 ...state,
-                totalUsersCount: action.count,
+                totalUsersCount: action.count
             };
         case 'SN/USERS/TOGGLE_IS_FETCHING':
             return {
                 ...state,
-                isFetching: action.isFetching,
+                isFetching: action.isFetching
             };
         case 'SN/USERS/TOGGLE_IS_FOLLOWING_PROGRESS':
             return {
                 ...state,
                 followingInProgress: action.isFetching
                     ? [...state.followingInProgress, action.userId]
-                    : state.followingInProgress.filter((id) => id !== action.userId),
+                    : state.followingInProgress.filter((id) => id !== action.userId)
             };
         default:
             return state;
@@ -65,7 +65,7 @@ export const actions = {
     setTotalUsersCount: (count: number) => ({ type: 'SN/USERS/SET_TOTAL_USERS_COUNT', count } as const),
     toggleIsFetching: (isFetching: boolean) => ({ type: 'SN/USERS/TOGGLE_IS_FETCHING', isFetching } as const),
     toggleFollowingProgress: (isFetching: boolean, userId: number) =>
-        ({ type: 'SN/USERS/TOGGLE_IS_FOLLOWING_PROGRESS', isFetching, userId } as const),
+        ({ type: 'SN/USERS/TOGGLE_IS_FOLLOWING_PROGRESS', isFetching, userId } as const)
 };
 
 export const getUsers =
@@ -96,7 +96,7 @@ const _followUnfollowFlow = async (
     dispatch: Dispatch<ActionsTypes>,
     userId: number,
     apiMethod: (userId: number) => Promise<APIResponseType>,
-    followStatus: boolean,
+    followStatus: boolean
 ) => {
     dispatch(actions.toggleFollowingProgress(true, userId));
     const data = await apiMethod(userId);

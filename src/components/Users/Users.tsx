@@ -23,7 +23,7 @@ const Users: React.FC<PropsType> = ({
     isFetching,
     followingInProgress,
     unFollow,
-    follow,
+    follow
 }) => {
     return (
         <div>
@@ -37,7 +37,7 @@ const Users: React.FC<PropsType> = ({
             {isFetching && <Preloader />}
 
             {!isFetching &&
-                users.map((user) => (
+                users.map((user: UserType) => (
                     <User
                         user={user}
                         followingInProgress={followingInProgress}

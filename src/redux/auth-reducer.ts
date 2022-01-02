@@ -8,7 +8,7 @@ const initialState = {
     login: null as string | null,
     isAuth: false as boolean,
     errorMessage: null as string | null,
-    captcha: null as string | null,
+    captcha: null as string | null
 };
 
 const authReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
@@ -16,21 +16,21 @@ const authReducer = (state = initialState, action: ActionsTypes): InitialStateTy
         case 'SN/AUTH/SET_USER_DATA':
             return {
                 ...state,
-                ...action.payload,
+                ...action.payload
             };
         case 'SN/AUTH/SET_LOGOUT_USER_DATA':
             return {
-                ...initialState,
+                ...initialState
             };
         case 'SN/AUTH/SET_ERROR':
             return {
                 ...state,
-                errorMessage: action.error,
+                errorMessage: action.error
             };
         case 'SN/AUTH/SET_CAPTCHA':
             return {
                 ...state,
-                captcha: action.captcha,
+                captcha: action.captcha
             };
         default:
             return state;
@@ -42,7 +42,7 @@ const actions = {
         ({ type: 'SN/AUTH/SET_USER_DATA', payload: { userId, email, login, isAuth } } as const),
     setCaptcha: (captcha: string | null) => ({ type: 'SN/AUTH/SET_CAPTCHA', captcha } as const),
     setLogoutUserData: () => ({ type: 'SN/AUTH/SET_LOGOUT_USER_DATA' } as const),
-    setError: (error: string) => ({ type: 'SN/AUTH/SET_ERROR', error } as const),
+    setError: (error: string) => ({ type: 'SN/AUTH/SET_ERROR', error } as const)
 };
 
 export const getAuthUserData = (): ThunkType => async (dispatch) => {

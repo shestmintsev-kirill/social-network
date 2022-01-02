@@ -7,12 +7,12 @@ const initialState = {
         { id: 1, message: 'Hi, how are you?', likesCount: 12 },
         { id: 2, message: "It's my first post", likesCount: 11 },
         { id: 3, message: 'Blabla', likesCount: 11 },
-        { id: 4, message: 'Dada', likesCount: 11 },
+        { id: 4, message: 'Dada', likesCount: 11 }
     ] as Array<PostType>,
     newPostText: 'it-kamasutra.com' as string,
     profile: null as ProfileType | null,
     status: '' as string,
-    errors: [] as Array<string>,
+    errors: [] as Array<string>
 };
 
 const profileReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
@@ -21,37 +21,37 @@ const profileReducer = (state = initialState, action: ActionsTypes): InitialStat
             const newPost = {
                 id: 5,
                 message: action.post,
-                likesCount: 0,
+                likesCount: 0
             };
             return {
                 ...state,
                 posts: [...state.posts, newPost],
-                newPostText: '',
+                newPostText: ''
             };
         case 'SN/PROFILE/SET_USER_PROFILE':
             return {
                 ...state,
-                profile: action.profile,
+                profile: action.profile
             };
         case 'SN/PROFILE/SET_STATUS':
             return {
                 ...state,
-                status: action.status,
+                status: action.status
             };
         case 'SN/PROFILE/SEVE_PHOTO_SUCCESS':
             return {
                 ...state,
-                profile: { ...state.profile, photos: action.photos } as ProfileType,
+                profile: { ...state.profile, photos: action.photos } as ProfileType
             };
         case 'SN/PROFILE/SET_ERROR':
             return {
                 ...state,
-                errors: action.err,
+                errors: action.err
             };
         case 'SN/PROFILE/DELETE_POST':
             return {
                 ...state,
-                posts: state.posts.filter((p) => p.id !== action.postId),
+                posts: state.posts.filter((p) => p.id !== action.postId)
             };
         default:
             return state;
@@ -64,7 +64,7 @@ export const actions = {
     setStatus: (status: string) => ({ type: 'SN/PROFILE/SET_STATUS', status } as const),
     deletePost: (postId: number) => ({ type: 'SN/PROFILE/DELETE_POST', postId } as const),
     savePhotoSuccess: (photos: PhotosType) => ({ type: 'SN/PROFILE/SEVE_PHOTO_SUCCESS', photos } as const),
-    setError: (err: Array<string>) => ({ type: 'SN/PROFILE/SET_ERROR', err } as const),
+    setError: (err: Array<string>) => ({ type: 'SN/PROFILE/SET_ERROR', err } as const)
 };
 
 export const getUserProfile =

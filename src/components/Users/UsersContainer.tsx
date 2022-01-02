@@ -9,7 +9,7 @@ import {
     getIsFetching,
     getPageSize,
     getTotalUsersCount,
-    getUsersState,
+    getUsersState
 } from '../../redux/users-selectors';
 import { UserType } from '../../types/types';
 import { AppStateType } from '../../redux/redux-store';
@@ -68,7 +68,7 @@ const mapStateToProps = (state: AppStateType): MapStatePropsType => {
         totalUsersCount: getTotalUsersCount(state),
         currentPage: getCurrentPage(state),
         isFetching: getIsFetching(state),
-        followingInProgress: getFollowingInProgress(state),
+        followingInProgress: getFollowingInProgress(state)
     };
 };
 
@@ -76,6 +76,6 @@ export default compose(
     connect<MapStatePropsType, MapDispatchPropsType, OwnPropsType, AppStateType>(mapStateToProps, {
         follow,
         unFollow,
-        getUsers,
-    }),
+        getUsers
+    })
 )(UsersContainer);
