@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
-import UsersContainer from './components/Users/UsersContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
 import Login from './components/Login/Login';
 import Preloader from './components/common/Preloader/Preloader';
@@ -9,6 +8,7 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import { initializeApp } from './redux/app-reducer';
 import { connect } from 'react-redux';
 import { AppStateType } from './redux/redux-store';
+import Users from './components/Users/Users';
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
@@ -45,7 +45,7 @@ class App extends React.Component<MapProprsType & DispatchPropsType> {
                                 <ProfileContainer />
                             </Route>
                             <Route path="/users">
-                                <UsersContainer />
+                                <Users />
                             </Route>
                             <Route path="/login">
                                 <Login />
@@ -62,7 +62,7 @@ class App extends React.Component<MapProprsType & DispatchPropsType> {
 }
 
 const mapStateToProps = (state: AppStateType) => ({
-    initialized: state.app.initialized,
+    initialized: state.app.initialized
 });
 
 export default connect(mapStateToProps, { initializeApp })(App);

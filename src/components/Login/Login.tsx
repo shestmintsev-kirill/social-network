@@ -1,30 +1,16 @@
 import { useFormik } from 'formik';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../redux/auth-reducer';
 import * as Yup from 'yup';
 import { Input } from '../common/FormsControls/FormsControls';
 import { Redirect } from 'react-router';
 import { AppStateType } from '../../redux/redux-store';
 
-type MapStateLoginPropsType = {
-    captcha: string | null;
-    errorMessage: string | null;
-    isAuth: boolean;
-};
+const Login: React.FC = () => {
+    const isAuth = useSelector((state: AppStateType) => state.auth.isAuth);
+    const dispatch = useDispatch();
 
-type LoginDataType = {
-    email: string;
-    password: string;
-    captcha: string;
-    rememberMe: boolean;
-};
-
-type MapDispatchLoginPropsType = {
-    login: (loginData: LoginDataType) => void;
-};
-
-const Login: React.FC<MapStateLoginPropsType & MapDispatchLoginPropsType> = (props) => {
-    if (props.isAuth) {
+    if (isAuth) {
         return <Redirect to={'/profile'} />;
     }
 
@@ -35,13 +21,13 @@ const Login: React.FC<MapStateLoginPropsType & MapDispatchLoginPropsType> = (pro
                 delete loginData[value];
             }
         }
-        props.login(loginData);
+        dispatch(login(loginData));
     };
 
     return (
         <div>
             <h1>Login</h1>
-            <LoginForm authLogin={authLogin} errorMessage={props.errorMessage} captcha={props.captcha} />
+            <LoginForm authLogin={authLogin} />
         </div>
     );
 };
@@ -54,13 +40,14 @@ export interface LoginValuesType {
     rememberMe: boolean;
 }
 
-// type LoginFormPropsType = {
-//   errorMessage: string | null,
-//   captcha: string | null,
-//   authLogin: (values: LoginValuesType) => void
-// }
-const LoginForm: React.FC<any> = (props) => {
-    const validationsSchema = Yup.object().shape({
+type LoginFormPropsType = {
+    authLogin: (values: LoginValuesType) => void;
+};
+const LoginForm: React.FC<LoginFormPropsType> = ({ authLogin }) => {
+    const captcha = useSelector((state: AppStateType) => state.auth.captcha);
+    const errorMessage = useSelector((state: AppStateType) => state.auth.errorMessage);
+
+    const validationsSchema = Yup.object<Record<keyof LoginValuesType, Yup.AnySchema>>().shape({
         email: Yup.string().email('Не валидный email').required('Логин обязателен'),
         password: Yup.string()
             .typeError('Должно быть строкой')
@@ -69,7 +56,8 @@ const LoginForm: React.FC<any> = (props) => {
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password')], 'Пароли не совпадают')
             .required('Подтверждение пароля обязательно'),
-        captcha: props.captcha && Yup.string().required('Поле обязательно'),
+        //@ts-ignore
+        captcha: captcha && Yup.string().required('Поле обязательно')
     });
 
     const formik = useFormik({
@@ -78,20 +66,25 @@ const LoginForm: React.FC<any> = (props) => {
             password: '',
             confirmPassword: '',
             captcha: '',
-            rememberMe: false,
+            rememberMe: false
         },
         onSubmit: (values: any, { resetForm }) => {
-            props.authLogin(values);
+            authLogin(values);
             values.captcha = '';
-            // props.errorMessage && resetForm();
+            // errorMessage && resetForm();
         },
-        validationSchema: validationsSchema,
+        validationSchema: validationsSchema
     });
 
     const loginInputs = [
         { name: 'email', title: 'Логин', placeholder: 'Login', type: 'text' },
         { name: 'password', title: 'Пароль', placeholder: 'Password', type: 'password' },
-        { name: 'confirmPassword', title: 'Подтвердите Пароль', placeholder: 'Confirm password', type: 'password' },
+        {
+            name: 'confirmPassword',
+            title: 'Подтвердите Пароль',
+            placeholder: 'Confirm password',
+            type: 'password'
+        }
     ];
 
     return (
@@ -119,9 +112,9 @@ const LoginForm: React.FC<any> = (props) => {
                 />{' '}
                 remember me
             </div>
-            {props.captcha && (
+            {captcha && (
                 <div>
-                    <img src={props.captcha} alt="captcha" />
+                    <img src={captcha} alt="captcha" />
                     <Input
                         type="text"
                         name={'captcha'}
@@ -133,7 +126,7 @@ const LoginForm: React.FC<any> = (props) => {
                 </div>
             )}
             <div>
-                <p style={{ color: 'red' }}>{props.errorMessage}</p>
+                <p style={{ color: 'red' }}>{errorMessage}</p>
                 <button disabled={!formik.dirty || !formik.isValid} type={'submit'}>
                     Login
                 </button>
@@ -142,12 +135,4 @@ const LoginForm: React.FC<any> = (props) => {
     );
 };
 
-const mapStateToProps = (state: AppStateType) => ({
-    isAuth: state.auth.isAuth,
-    errorMessage: state.auth.errorMessage,
-    captcha: state.auth.captcha,
-});
-
-export default connect<MapStateLoginPropsType, MapDispatchLoginPropsType, unknown, AppStateType>(mapStateToProps, {
-    login,
-})(Login);
+export default Login;
