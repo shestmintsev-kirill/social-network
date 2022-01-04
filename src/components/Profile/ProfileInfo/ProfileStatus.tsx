@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Input } from 'antd';
+
 // import s from './ProfileInfo.module.css';
 
 type PropsType = {
@@ -35,7 +37,7 @@ const ProfileStatus: React.FC<PropsType> = ({ status, isOwner = false, updateSta
             {editMode ? (
                 <div>
                     Статус:{' '}
-                    <input
+                    <Input
                         onChange={onStatusChange}
                         onBlur={deactivateEditMode}
                         autoFocus

@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import { ContactsType, ProfileType } from '../../../types/types';
-import { Input, InputLow } from '../../common/FormsControls/FormsControls';
+import { BaseInput, InputLow } from '../../common/FormsControls/FormsControls';
 
 type ProfileDescriptionFormPropsType = {
     profile: ProfileType;
@@ -23,7 +23,7 @@ const ProfileDescriptionForm: React.FC<ProfileDescriptionFormPropsType> = ({
     closeEditMode,
     updateProfile,
     authorizedUserId,
-    errors,
+    errors
 }) => {
     const examValue = (value: string) => {
         return value.length ? value : '';
@@ -43,25 +43,25 @@ const ProfileDescriptionForm: React.FC<ProfileDescriptionFormPropsType> = ({
                 twitter: examValue(profile.contacts.twitter),
                 vk: examValue(profile.contacts.vk),
                 website: examValue(profile.contacts.website),
-                youtube: examValue(profile.contacts.youtube),
-            },
+                youtube: examValue(profile.contacts.youtube)
+            }
         },
         onSubmit: async (values: ProfileDescriptionFormValuesType) => {
             await updateProfile({ ...values, userId: authorizedUserId });
             closeEditMode();
-        },
+        }
     });
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            <Input
+            <BaseInput
                 title={'Имя'}
                 name={'fullName'}
                 onChange={formik.handleChange}
                 value={formik.values.fullName}
                 placeholder={'fullName'}
             />
-            <Input
+            <BaseInput
                 title={'Обо мне'}
                 name={'aboutMe'}
                 onChange={formik.handleChange}
@@ -76,7 +76,7 @@ const ProfileDescriptionForm: React.FC<ProfileDescriptionFormPropsType> = ({
             />{' '}
             looking For A Job
             {formik.values.lookingForAJob && (
-                <Input
+                <BaseInput
                     title={'Описание для поиска работы'}
                     name={'lookingForAJobDescription'}
                     onChange={formik.handleChange}

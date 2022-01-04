@@ -2,7 +2,7 @@ import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../redux/auth-reducer';
 import * as Yup from 'yup';
-import { Input } from '../common/FormsControls/FormsControls';
+import { BaseInput } from '../common/FormsControls/FormsControls';
 import { Redirect } from 'react-router';
 import { AppStateType } from '../../redux/redux-store';
 
@@ -17,9 +17,7 @@ const Login: React.FC = () => {
     const authLogin = (values: LoginValuesType) => {
         const loginData = { ...values };
         for (const value in loginData) {
-            if (value === 'confirmPassword') {
-                delete loginData[value];
-            }
+            if (value === 'confirmPassword') delete loginData[value];
         }
         dispatch(login(loginData));
     };
@@ -90,7 +88,7 @@ const LoginForm: React.FC<LoginFormPropsType> = ({ authLogin }) => {
     return (
         <form onSubmit={formik.handleSubmit}>
             {loginInputs.map((input, index) => (
-                <Input
+                <BaseInput
                     key={index}
                     title={input.title}
                     type={input.type}
@@ -115,7 +113,7 @@ const LoginForm: React.FC<LoginFormPropsType> = ({ authLogin }) => {
             {captcha && (
                 <div>
                     <img src={captcha} alt="captcha" />
-                    <Input
+                    <BaseInput
                         type="text"
                         name={'captcha'}
                         value={formik.values.captcha}

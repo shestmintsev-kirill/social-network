@@ -1,4 +1,6 @@
 import s from './FormsControls.module.css';
+import { Input } from 'antd';
+const { TextArea } = Input;
 
 type InputPropsType = {
     name: string;
@@ -13,12 +15,12 @@ type InputPropsType = {
     onBlur?: any;
     onChange: any;
 };
-export const Input: React.FC<InputPropsType> = (props) => {
+export const BaseInput: React.FC<InputPropsType> = (props) => {
     return (
         <div className={s.inputWrapper}>
             <label htmlFor={props.htmlFor}>{props.title}</label>
             <br />
-            <input
+            <Input
                 className={`${s.input} ${props.touched && props.errors && s.inputError}`}
                 type={props.type}
                 placeholder={props.placeholder}
@@ -39,7 +41,7 @@ export const InputLow: React.FC<InputPropsType> = (props) => {
                 {props.title}
             </label>
             <br />
-            <input
+            <Input
                 className={`${s.input} ${props.isError && s.inputError}`}
                 type={props.type}
                 placeholder={props.placeholder}
@@ -63,7 +65,7 @@ type TextareaPropsType = {
 export const Textarea: React.FC<TextareaPropsType> = (props) => {
     return (
         <div>
-            <textarea className={s.textarea} {...props} />
+            <TextArea className={s.textarea} {...props} />
         </div>
     );
 };
