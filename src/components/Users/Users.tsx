@@ -75,6 +75,7 @@ const Users: React.FC = () => {
     const unFollow = (userId: number) => {
         dispatch(unFollow(userId));
     };
+
     const follow = (userId: number) => {
         dispatch(follow(userId));
     };

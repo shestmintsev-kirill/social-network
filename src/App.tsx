@@ -1,7 +1,5 @@
-import { LaptopOutlined, UserOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu } from 'antd';
 import 'antd/dist/antd.css';
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import './App.css';
@@ -11,17 +9,25 @@ import Login from './components/Login/Login';
 import Users from './components/Users/Users';
 import { initializeApp } from './redux/app-reducer';
 import { AppStateType } from './redux/redux-store';
+import { LaptopOutlined, UserOutlined } from '@ant-design/icons';
+import { Breadcrumb, Layout, Menu } from 'antd';
 
 const { SubMenu } = Menu;
 const { Content, Footer, Sider } = Layout;
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
+const ChatPage = React.lazy(() => import('./pages/ChatPage'));
 
 const App: React.FC = () => {
+    const [breadcrumbItem, setBreadcrumbItem] = useState<string>('');
     const initialized = useSelector((state: AppStateType) => state.app.initialized);
     const dispatch = useDispatch();
     const history = useHistory();
+
+    window.addEventListener('hashchange', () => {
+        setBreadcrumbItem(history.location.pathname.replace('/', ''));
+    });
 
     useEffect(() => {
         dispatch(initializeApp());
@@ -39,9 +45,7 @@ const App: React.FC = () => {
                     <Breadcrumb.Item>
                         <Link to="/profile">Home</Link>
                     </Breadcrumb.Item>
-                    {history.location.pathname !== '/profile' && (
-                        <Breadcrumb.Item>{history.location.pathname.replace('/', '')}</Breadcrumb.Item>
-                    )}
+                    {breadcrumbItem !== 'profile' && <Breadcrumb.Item>{breadcrumbItem}</Breadcrumb.Item>}
                 </Breadcrumb>
                 <Layout className="site-layout-background" style={{ padding: '24px 0' }}>
                     <Sider className="site-layout-background" width={200}>
@@ -52,6 +56,9 @@ const App: React.FC = () => {
                                 </Menu.Item>
                                 <Menu.Item key="2">
                                     <Link to="/dialogs">Messages</Link>
+                                </Menu.Item>
+                                <Menu.Item key="3">
+                                    <Link to="/chat">Chat</Link>
                                 </Menu.Item>
                             </SubMenu>
                             <SubMenu key="sub2" icon={<LaptopOutlined />} title="Developers">
@@ -78,6 +85,9 @@ const App: React.FC = () => {
                                 </Route>
                                 <Route path="/login">
                                     <Login />
+                                </Route>
+                                <Route path="/chat">
+                                    <ChatPage />
                                 </Route>
                                 <Route path="*">
                                     <div>404 not found</div>

@@ -23,7 +23,7 @@ const Header: React.FC = () => {
             <div className="logo" />
             <Row>
                 <Col span={18}>
-                    <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+                    <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
                         <Menu.Item key="1">
                             <Link to="/developers">Developers</Link>
                         </Menu.Item>
