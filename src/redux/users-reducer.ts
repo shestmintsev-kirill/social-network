@@ -91,13 +91,13 @@ export const getUsers =
         dispatch(actions.toggleIsFetching(false));
     };
 
-export const follow =
+export const followThunk =
     (userId: number): ThunkType =>
     async (dispatch) => {
         await _followUnfollowFlow(dispatch, userId, usersAPI.follow.bind(usersAPI), true);
     };
 
-export const unFollow =
+export const unFollowThunk =
     (userId: number): ThunkType =>
     async (dispatch) => {
         await _followUnfollowFlow(dispatch, userId, usersAPI.unFollow.bind(usersAPI), false);

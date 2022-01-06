@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import queryString from 'query-string';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { FilterType, getUsers } from '../../redux/users-reducer';
+import { FilterType, followThunk, getUsers, unFollowThunk } from '../../redux/users-reducer';
 import {
     getCurrentPage,
     getFollowingInProgress,
@@ -73,11 +73,11 @@ const Users: React.FC = () => {
     };
 
     const unFollow = (userId: number) => {
-        dispatch(unFollow(userId));
+        dispatch(unFollowThunk(userId));
     };
 
     const follow = (userId: number) => {
-        dispatch(follow(userId));
+        dispatch(followThunk(userId));
     };
 
     return (
