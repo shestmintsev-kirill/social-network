@@ -1,12 +1,14 @@
 import { useFormik } from 'formik';
 import { ContactsType, ProfileType } from '../../../types/types';
 import { BaseInput, InputLow } from '../../common/FormsControls/FormsControls';
+import { Button } from 'antd';
+import { updateProfile } from '../../../redux/profile-reducer';
+import { useDispatch } from 'react-redux';
 
 type ProfileDescriptionFormPropsType = {
     profile: ProfileType;
-    authorizedUserId: number;
-    errors: Array<string>;
-    updateProfile: (payload: ProfileType) => void;
+    authorizedUserId: number | null;
+    errors: string[];
     closeEditMode: () => void;
 };
 
@@ -21,10 +23,10 @@ type ProfileDescriptionFormValuesType = {
 const ProfileDescriptionForm: React.FC<ProfileDescriptionFormPropsType> = ({
     profile,
     closeEditMode,
-    updateProfile,
     authorizedUserId,
     errors
 }) => {
+    const dispatch = useDispatch();
     const examValue = (value: string) => {
         return value.length ? value : '';
     };
@@ -47,8 +49,10 @@ const ProfileDescriptionForm: React.FC<ProfileDescriptionFormPropsType> = ({
             }
         },
         onSubmit: async (values: ProfileDescriptionFormValuesType) => {
-            await updateProfile({ ...values, userId: authorizedUserId });
-            closeEditMode();
+            if (authorizedUserId) {
+                await dispatch(updateProfile({ ...values, userId: authorizedUserId }));
+                closeEditMode();
+            }
         }
     });
 
@@ -86,7 +90,7 @@ const ProfileDescriptionForm: React.FC<ProfileDescriptionFormPropsType> = ({
             )}
             <Contacts contacts={formik.values.contacts} onChange={formik.handleChange} errors={errors} />
             <div>
-                <button type={'submit'}>Send</button>
+                <Button htmlType={'submit'}>Send</Button>
             </div>
             {!!errors.length &&
                 errors.map((err: string, index: number) => (
@@ -102,11 +106,10 @@ const ProfileDescriptionForm: React.FC<ProfileDescriptionFormPropsType> = ({
 type ContactsPropsType = {
     contacts: any;
     onChange: any;
-    errors: Array<string>;
+    errors: string[];
 };
 
 const Contacts: React.FC<ContactsPropsType> = ({ contacts, onChange, errors }) => {
-    console.log(contacts, onChange, errors);
     const err = errors.map((e: string) => {
         return e.split('->')[1].replace(')', '').toLowerCase();
     });

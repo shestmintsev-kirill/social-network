@@ -7,12 +7,12 @@ import MyPosts from './MyPosts';
 const mapStateToProps = (state: AppStateType) => {
     return {
         posts: state.profilePage.posts,
-        newPostText: state.profilePage.newPostText,
+        newPostText: state.profilePage.newPostText
     };
 };
 
 type MapStatePropsType = {
-    posts: Array<PostType>;
+    posts: PostType[];
     newPostText: string;
 };
 
@@ -21,5 +21,5 @@ type MapDispatchPropsType = {
 };
 
 export default connect<MapStatePropsType, MapDispatchPropsType, unknown, AppStateType>(mapStateToProps, {
-    addPost: actions.addPost,
+    addPost: actions.addPost
 })(MyPosts);

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import s from './Pagination.module.css';
+import { Button } from 'antd';
 
 type PropsType = {
     portionSize?: number;
@@ -14,7 +15,7 @@ const Pagination: React.FC<PropsType> = ({
     currentPage = 1,
     onPageChanged = (x) => x,
     pageSize,
-    totalUsersCount,
+    totalUsersCount
 }) => {
     const pagesCount = Math.ceil(totalUsersCount / pageSize);
     const portionCount = Math.ceil(pagesCount / portionSize);
@@ -22,7 +23,7 @@ const Pagination: React.FC<PropsType> = ({
     const leftPortionPageNumber = (potrionNumber - 1) * portionSize + 1;
     const rightPortionPageNumber = potrionNumber * portionSize;
 
-    const pages: Array<number> = [];
+    const pages: number[] = [];
     for (let i = 1; i <= pagesCount; i++) {
         pages.push(i);
     }
@@ -58,9 +59,9 @@ const Pagination: React.FC<PropsType> = ({
 
     return (
         <div>
-            {potrionNumber > 1 && <button onClick={prevLastPage}>{'<<'}</button>}
-            {potrionNumber > 1 && <button onClick={prevPortion}>{'<'}</button>}
-            {currentPage > 1 && <button onClick={prevPage}>Prev</button>}
+            {potrionNumber > 1 && <Button onClick={prevLastPage}>{'<<'}</Button>}
+            {potrionNumber > 1 && <Button onClick={prevPortion}>{'<'}</Button>}
+            {currentPage > 1 && <Button onClick={prevPage}>Prev</Button>}
             {pages
                 .filter((p) => p >= leftPortionPageNumber && p <= rightPortionPageNumber)
                 .map((page) => (
@@ -74,9 +75,9 @@ const Pagination: React.FC<PropsType> = ({
                         {page}
                     </span>
                 ))}
-            {pagesCount !== currentPage && <button onClick={nextPage}>Next</button>}
-            {portionCount > potrionNumber && <button onClick={nextPortion}>{'>'}</button>}
-            {portionCount > potrionNumber && <button onClick={nextLastPage}>{'>>'}</button>}
+            {pagesCount !== currentPage && <Button onClick={nextPage}>Next</Button>}
+            {portionCount > potrionNumber && <Button onClick={nextPortion}>{'>'}</Button>}
+            {portionCount > potrionNumber && <Button onClick={nextLastPage}>{'>>'}</Button>}
         </div>
     );
 };

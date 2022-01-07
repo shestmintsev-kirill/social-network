@@ -5,12 +5,12 @@ import { usersAPI } from '../api/users-api';
 import { APIResponseType } from '../api/api';
 
 const initialState = {
-    users: [] as Array<UserType>,
+    users: [] as UserType[],
     pageSize: 5,
     totalUsersCount: 0,
     currentPage: 1,
     isFetching: false,
-    followingInProgress: [] as Array<number>, //array of users ids,
+    followingInProgress: [] as number[], //array of users ids,
     filter: {
         term: '',
         friend: null as null | boolean
@@ -69,7 +69,7 @@ const usersReducer = (state = initialState, action: ActionsTypes): UsersInitialS
 export const actions = {
     setFollowUnfollow: (userId: number, followedStatus: boolean) =>
         ({ type: 'SN/USERS/FOLLOW_UNFOLLOW', userId, followedStatus } as const),
-    setUsers: (users: Array<UserType>) => ({ type: 'SN/USERS/SET_USERS', users } as const),
+    setUsers: (users: UserType[]) => ({ type: 'SN/USERS/SET_USERS', users } as const),
     setFilter: (filter: FilterType) => ({ type: 'SN/USERS/SET_FILTER', payload: filter } as const),
     setCurrentPage: (page: number) => ({ type: 'SN/USERS/SET_CURRENT_PAGE', page } as const),
     setTotalUsersCount: (count: number) => ({ type: 'SN/USERS/SET_TOTAL_USERS_COUNT', count } as const),

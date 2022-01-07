@@ -1,11 +1,12 @@
 import s from './Users.module.css';
 import userPhoto from '../../assets/images/avatar.png';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { UserType } from '../../types/types';
+import { Button } from 'antd';
 
 type PropsType = {
     user: UserType;
-    followingInProgress: Array<number>;
+    followingInProgress: number[];
     unFollow: (id: number) => void;
     follow: (id: number) => void;
 };
@@ -15,29 +16,33 @@ const User: React.FC<PropsType> = ({ user, followingInProgress, unFollow, follow
         <div>
             <div>
                 <div className={s.avatarWrapper}>
-                    <NavLink to={'/profile/' + user.id}>
+                    <Link
+                        to={{
+                            pathname: '/profile/' + user.id
+                        }}
+                    >
                         <img src={user.photos.small ? user.photos.small : userPhoto} alt="user" />
-                    </NavLink>
+                    </Link>
                 </div>
                 <div>
                     {user.followed ? (
-                        <button
+                        <Button
                             disabled={followingInProgress.some((id: number) => id === user.id)}
                             onClick={() => {
                                 unFollow(user.id);
                             }}
                         >
                             Unfollow
-                        </button>
+                        </Button>
                     ) : (
-                        <button
+                        <Button
                             disabled={followingInProgress.some((id: number) => id === user.id)}
                             onClick={() => {
                                 follow(user.id);
                             }}
                         >
                             Follow
-                        </button>
+                        </Button>
                     )}
                 </div>
             </div>

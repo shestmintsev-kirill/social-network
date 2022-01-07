@@ -5,6 +5,7 @@ import Message from './Message/Message';
 import { useFormik } from 'formik';
 import { Textarea } from '../common/FormsControls/FormsControls';
 import { DialogType, InitialDialogsStateType, MessageType } from '../../redux/dialogs-reducer';
+import { Button } from 'antd';
 
 type DialogsPropsType = {
     dialogsPage: InitialDialogsStateType;
@@ -14,8 +15,12 @@ type DialogsPropsType = {
 const Dialogs: React.FC<DialogsPropsType> = (props) => {
     const state = props.dialogsPage;
 
-    const dialogsElements = state.dialogs.map((d: DialogType) => <DialogItem name={d.name} id={d.id} key={d.id} />);
-    const messagesElements = state.messages.map((m: MessageType, i: number) => <Message message={m.message} key={i} />);
+    const dialogsElements = state.dialogs.map((d: DialogType) => (
+        <DialogItem name={d.name} id={d.id} key={d.id} />
+    ));
+    const messagesElements = state.messages.map((m: MessageType, i: number) => (
+        <Message message={m.message} key={i} />
+    ));
 
     const addNewMessage = (values: MessageValuesType) => {
         props.sendMessage(values.message);
@@ -45,12 +50,12 @@ type MessageFormPropsType = {
 const MessageForm: React.FC<MessageFormPropsType> = (props) => {
     const formik = useFormik({
         initialValues: {
-            message: '',
+            message: ''
         },
         onSubmit: (values: MessageValuesType, { resetForm }) => {
             props.addNewMessage(values);
             resetForm();
-        },
+        }
     });
 
     return (
@@ -63,9 +68,9 @@ const MessageForm: React.FC<MessageFormPropsType> = (props) => {
                 placeholder={'Enter your message'}
             />
             <div>
-                <button disabled={!formik.dirty} type={'submit'}>
+                <Button disabled={!formik.dirty} htmlType="submit">
                     Send
-                </button>
+                </Button>
             </div>
         </form>
     );

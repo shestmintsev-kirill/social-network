@@ -16,7 +16,7 @@ const { SubMenu } = Menu;
 const { Content, Footer, Sider } = Layout;
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
-const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
+const Profile = React.lazy(() => import('./pages/Profile'));
 const ChatPage = React.lazy(() => import('./pages/ChatPage'));
 
 const App: React.FC = () => {
@@ -78,7 +78,7 @@ const App: React.FC = () => {
                                     <DialogsContainer />
                                 </Route>
                                 <Route path="/profile/:userId?">
-                                    <ProfileContainer />
+                                    <Profile />
                                 </Route>
                                 <Route path="/developers">
                                     <Users />

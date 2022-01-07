@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from 'antd';
-
-// import s from './ProfileInfo.module.css';
+import { updateStatus } from '../../../redux/profile-reducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppStateType } from '../../../redux/redux-store';
+import { EditOutlined } from '@ant-design/icons';
 
 type PropsType = {
-    status: string;
     isOwner?: boolean;
-    updateStatus?: (status: string) => void;
 };
-const ProfileStatus: React.FC<PropsType> = ({ status, isOwner = false, updateStatus = (x) => x }) => {
+const ProfileStatus: React.FC<PropsType> = ({ isOwner = false }) => {
+    const status = useSelector((state: AppStateType) => state.profilePage.status);
     const [editMode, setEditMode] = useState(false);
     const [profileStatus, setStatus] = useState(status);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setStatus(status);
@@ -25,7 +27,7 @@ const ProfileStatus: React.FC<PropsType> = ({ status, isOwner = false, updateSta
 
     const deactivateEditMode = () => {
         setEditMode(false);
-        updateStatus(profileStatus);
+        dispatch(updateStatus(profileStatus));
     };
 
     const onStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,9 +49,10 @@ const ProfileStatus: React.FC<PropsType> = ({ status, isOwner = false, updateSta
                 </div>
             ) : (
                 <div>
-                    <span onDoubleClick={activateEditMode}>
+                    <span>
                         <strong>Статус:</strong> {status || 'Нет статуса'}
                     </span>
+                    <EditOutlined style={{ marginLeft: '10px' }} onClick={activateEditMode} />
                 </div>
             )}
         </div>

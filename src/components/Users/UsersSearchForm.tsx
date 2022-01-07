@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import React from 'react';
 import { getUsersFilter } from '../../redux/users-selectors';
 import { useSelector } from 'react-redux';
+import { Button } from 'antd';
 
 type PropsType = {
     onFilterChanged: (filter: FilterType) => void;
@@ -52,9 +53,9 @@ const UsersSearchForm: React.FC<PropsType> = React.memo((props) => {
                     <option value="false">Only unfollowed</option>
                 </select>
             </div>
-            <button disabled={!formik.isValid} type={'submit'}>
+            <Button disabled={!formik.isValid} htmlType="submit">
                 Search
-            </button>
+            </Button>
         </form>
     );
 });

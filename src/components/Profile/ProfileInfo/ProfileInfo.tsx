@@ -4,39 +4,41 @@ import Preloader from '../../common/Preloader/Preloader';
 import ProfileDescriptionForm from './ProfileDescriptionForm';
 import s from './ProfileInfo.module.css';
 import ProfileStatus from './ProfileStatus';
+import { Button } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import { AppStateType } from '../../../redux/redux-store';
+import { getStatus, getUserProfile, savePhoto } from '../../../redux/profile-reducer';
 
-type ProfileInfoPropsType = {
-    profile: ProfileType;
-    status: string;
-    isOwner: boolean;
-    authorizedUserId: number;
-    errors: Array<string>;
-    updateStatus: (status: string) => void;
-    savePhoto: (file: File) => void;
-    updateProfile: (payload: ProfileType) => void;
-};
-
-const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
-    profile,
-    status,
-    updateStatus,
-    isOwner,
-    savePhoto,
-    updateProfile,
-    authorizedUserId,
-    errors,
-}) => {
+const ProfileInfo: React.FC = () => {
     const [editMode, setEditMode] = useState(false);
+
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const params = useParams<{ userId?: string }>();
+    const profile = useSelector((state: AppStateType) => state.profilePage.profile);
+    const authorizedUserId = useSelector((state: AppStateType) => state.auth.userId);
+    const errors = useSelector((state: AppStateType) => state.profilePage.errors);
+
+    useEffect(() => {
+        const userId = params?.userId ?? authorizedUserId;
+        if (!userId) {
+            history.push('/login');
+        } else {
+            dispatch(getUserProfile(userId as number));
+            dispatch(getStatus(userId as number));
+        }
+    }, [authorizedUserId, dispatch, history, params.userId]);
 
     useEffect(() => {
         if (errors.length) {
             setEditMode(true);
         }
-    }, [errors, authorizedUserId]);
+    }, [errors, authorizedUserId, errors.length]);
 
     const onMainPhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.length) {
-            savePhoto(e.target.files[0]);
+            dispatch(savePhoto(e.target.files[0]));
         }
     };
 
@@ -48,28 +50,32 @@ const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
         <div>
             <div className={s.avatar}>
                 <img
+                    style={{ width: '300px' }}
                     src={
                         profile?.photos?.large ||
                         'https://www.kindpng.com/picc/m/130-1300217_user-icon-member-icon-png-transparent-png.png'
                     }
                     alt="avatar"
                 />
-                {isOwner && editMode && (
+                {!params?.userId && editMode && (
                     <input type={'file'} accept=".png, .jpg, .jpeg" onChange={onMainPhotoSelected} />
                 )}
             </div>
             {!editMode ? (
-                <ProfileDescription profile={profile} isOwner={isOwner} goToEditMode={() => setEditMode(true)} />
+                <ProfileDescription
+                    profile={profile}
+                    isOwner={!params?.userId}
+                    goToEditMode={() => setEditMode(true)}
+                />
             ) : (
                 <ProfileDescriptionForm
                     errors={errors}
                     authorizedUserId={authorizedUserId}
-                    updateProfile={updateProfile}
                     profile={profile}
                     closeEditMode={() => setEditMode(false)}
                 />
             )}
-            <ProfileStatus status={status} updateStatus={updateStatus} isOwner={isOwner} />
+            <ProfileStatus isOwner={!params?.userId} />
         </div>
     );
 };
@@ -81,7 +87,7 @@ type ProfileDescriptionPropsType = {
 };
 
 const ProfileDescription: React.FC<ProfileDescriptionPropsType> = ({ profile, isOwner, goToEditMode }) => {
-    const profileContacts = Object.entries(profile?.contacts).map((contact: Array<string>, index: number) => {
+    const profileContacts = Object.entries(profile?.contacts).map((contact: string[], index: number) => {
         return contact[1] ? (
             <li key={index}>
                 <strong>{contact[0]}: </strong>
@@ -94,7 +100,7 @@ const ProfileDescription: React.FC<ProfileDescriptionPropsType> = ({ profile, is
 
     return (
         <form>
-            {isOwner && <button onClick={goToEditMode}>Edit profile</button>}
+            {isOwner && <Button onClick={goToEditMode}>Edit profile</Button>}
             <p>
                 <strong>Имя:</strong> {profile?.fullName}
             </p>

@@ -31,5 +31,5 @@ export const profileAPI = {
     async updateProfile(profile: ProfileType) {
         const res = await instance.put<APIResponseType>(`profile`, { ...profile });
         return res.data;
-    },
+    }
 };

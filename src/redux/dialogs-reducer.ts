@@ -8,14 +8,14 @@ const initialState = {
         { id: 4, name: 'Sasha' },
         { id: 5, name: 'Viktor' },
         { id: 6, name: 'Valera' }
-    ] as Array<DialogType>,
+    ] as DialogType[],
     messages: [
         { id: 1, message: 'Hi' },
         { id: 2, message: 'How is your it-kamasutra?' },
         { id: 3, message: 'Yo' },
         { id: 4, message: 'Yo' },
         { id: 5, message: 'Yo' }
-    ] as Array<MessageType>
+    ] as MessageType[]
 };
 
 const dialogsReducer = (state = initialState, action: ActionsTypes): InitialDialogsStateType => {

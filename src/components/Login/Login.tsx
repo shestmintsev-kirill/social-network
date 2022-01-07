@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { BaseInput } from '../common/FormsControls/FormsControls';
 import { Redirect } from 'react-router';
 import { AppStateType } from '../../redux/redux-store';
+import { Button } from 'antd';
 
 const Login: React.FC = () => {
     const isAuth = useSelector((state: AppStateType) => state.auth.isAuth);
@@ -125,9 +126,9 @@ const LoginForm: React.FC<LoginFormPropsType> = ({ authLogin }) => {
             )}
             <div>
                 <p style={{ color: 'red' }}>{errorMessage}</p>
-                <button disabled={!formik.dirty || !formik.isValid} type={'submit'}>
+                <Button disabled={!formik.dirty || !formik.isValid} htmlType="submit">
                     Login
-                </button>
+                </Button>
             </div>
         </form>
     );

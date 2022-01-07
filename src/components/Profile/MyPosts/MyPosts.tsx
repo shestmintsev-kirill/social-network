@@ -3,9 +3,10 @@ import { PostType } from '../../../types/types';
 import { Textarea } from '../../common/FormsControls/FormsControls';
 import s from './MyPosts.module.css';
 import Post from './Post/Post';
+import { Button } from 'antd';
 
 type MyPostsPropsType = {
-    posts: Array<PostType>;
+    posts: PostType[];
     newPostText: string;
     addPost: (post: string) => void;
 };
@@ -39,12 +40,12 @@ type PostFormPropsType = {
 const PostForm: React.FC<PostFormPropsType> = (props) => {
     const formik = useFormik({
         initialValues: {
-            post: '',
+            post: ''
         },
         onSubmit: (values: PostFormValues, { resetForm }) => {
             props.addNewPost(values);
             resetForm();
-        },
+        }
     });
 
     return (
@@ -57,9 +58,9 @@ const PostForm: React.FC<PostFormPropsType> = (props) => {
                 placeholder={'Enter your post'}
             />
             <div>
-                <button disabled={!formik.dirty} type={'submit'}>
+                <Button disabled={!formik.dirty} htmlType="submit">
                     Add post
-                </button>
+                </Button>
             </div>
         </form>
     );

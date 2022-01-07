@@ -8,11 +8,11 @@ const initialState = {
         { id: 2, message: "It's my first post", likesCount: 11 },
         { id: 3, message: 'Blabla', likesCount: 11 },
         { id: 4, message: 'Dada', likesCount: 11 }
-    ] as Array<PostType>,
+    ] as PostType[],
     newPostText: 'it-kamasutra.com' as string,
     profile: null as ProfileType | null,
     status: '' as string,
-    errors: [] as Array<string>
+    errors: [] as string[]
 };
 
 const profileReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
@@ -64,7 +64,7 @@ export const actions = {
     setStatus: (status: string) => ({ type: 'SN/PROFILE/SET_STATUS', status } as const),
     deletePost: (postId: number) => ({ type: 'SN/PROFILE/DELETE_POST', postId } as const),
     savePhotoSuccess: (photos: PhotosType) => ({ type: 'SN/PROFILE/SEVE_PHOTO_SUCCESS', photos } as const),
-    setError: (err: Array<string>) => ({ type: 'SN/PROFILE/SET_ERROR', err } as const)
+    setError: (err: string[]) => ({ type: 'SN/PROFILE/SET_ERROR', err } as const)
 };
 
 export const getUserProfile =
@@ -77,7 +77,7 @@ export const getUserProfile =
 export const getStatus =
     (userId: number): ThunkType =>
     async (dispatch) => {
-        const data = await profileAPI.getUserStatus(userId);
+        const data = await profileAPI.getUserStatus(Number(userId));
         dispatch(actions.setStatus(data));
     };
 

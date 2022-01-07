@@ -1,4 +1,4 @@
-import { actions, follow, unFollow } from './users-reducer';
+import { actions, followThunk, unFollowThunk } from './users-reducer';
 import { usersAPI } from '../api/users-api';
 import { APIResponseType, ResultCodeEnum } from '../api/api';
 
@@ -17,7 +17,7 @@ const result: APIResponseType = {
 
 test('follow thunk success', async () => {
     usersAPIMock.follow.mockReturnValue(Promise.resolve(result));
-    const thunk = follow(1);
+    const thunk = followThunk(1);
 
     await thunk(dispatchMock, getStateMock, {});
     expect(dispatchMock).toBeCalledTimes(3);
@@ -28,7 +28,7 @@ test('follow thunk success', async () => {
 
 test('unfollow thunk success', async () => {
     usersAPIMock.unFollow.mockReturnValue(Promise.resolve(result));
-    const thunk = unFollow(1);
+    const thunk = unFollowThunk(1);
 
     await thunk(dispatchMock, getStateMock, {});
     expect(dispatchMock).toBeCalledTimes(3);
