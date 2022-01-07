@@ -22,27 +22,29 @@ type QueryParamsType = {
     term?: string;
     page?: string;
     friend?: string;
+    size?: string;
 };
 
 const Users: React.FC = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const totalUsersCount = useSelector(getTotalUsersCount);
-    let currentPage = useSelector(getCurrentPage);
-    const pageSize = useSelector(getPageSize);
-    // const isFetching = useSelector((state: AppStateType) => state.usersPage.isFetching);
-    const isFetching = useSelector(getIsFetching);
     let filter = useSelector(getUsersFilter);
+    let currentPage = useSelector(getCurrentPage);
+    let pageSize = useSelector(getPageSize);
+    const totalUsersCount = useSelector(getTotalUsersCount);
+    const isFetching = useSelector(getIsFetching);
     const users = useSelector(getUsersState);
     const followingInProgress = useSelector(getFollowingInProgress);
 
     useEffect(() => {
         const query = queryString.parse(history.location.search) as QueryParamsType;
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        if (!!query.page) currentPage = Number(query.page);
+        if (query.page) currentPage = Number(query.page);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        if (!!query.term) filter = { ...filter, term: query.term };
+        if (query.size) pageSize = Number(query.size);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (query.term) filter = { ...filter, term: query.term };
         if (query.friend)
             filter = {
                 ...filter,
@@ -54,18 +56,18 @@ const Users: React.FC = () => {
 
     useEffect(() => {
         const queryParams: QueryParamsType = {};
-        if (!!filter.term) queryParams.term = filter.term;
-        if (!!filter.friend !== null) queryParams.friend = String(filter.friend);
+        if (filter.term) queryParams.term = filter.term;
+        if (filter.friend !== null) queryParams.friend = String(filter.friend);
         if (currentPage !== 1) queryParams.page = String(currentPage);
-
+        if (pageSize !== 5) queryParams.size = String(pageSize);
         history.push({
             pathname: '/developers',
             search: queryString.stringify(queryParams)
         });
-    }, [currentPage, filter, history]);
+    }, [currentPage, filter.friend, filter.term, history, pageSize]);
 
-    const onPageChanged = (page: number) => {
-        dispatch(getUsers(page, pageSize, filter));
+    const onPaginationChanged = (page: number, size: number = pageSize) => {
+        dispatch(getUsers(page, size, filter));
     };
 
     const onFilterChanged = (filter: FilterType) => {
@@ -85,7 +87,7 @@ const Users: React.FC = () => {
             <UsersSearchForm onFilterChanged={onFilterChanged} />
             <Pagination
                 currentPage={currentPage}
-                onPageChanged={onPageChanged}
+                onPaginationChanged={onPaginationChanged}
                 totalUsersCount={totalUsersCount}
                 pageSize={pageSize}
             />

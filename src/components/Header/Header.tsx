@@ -1,5 +1,5 @@
 import { UserOutlined } from '@ant-design/icons';
-import { Avatar, Col, Layout, Menu, Row, Button } from 'antd';
+import { Avatar, Col, Layout, Menu, Row, Button, Tooltip } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { logout } from '../../redux/auth-reducer';
@@ -31,8 +31,10 @@ const Header: React.FC = () => {
                 </Col>
                 {isAuth ? (
                     <>
-                        <Col span={1} title={login || ''}>
-                            <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+                        <Col span={1}>
+                            <Tooltip placement="bottom" title={login || ''}>
+                                <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+                            </Tooltip>
                         </Col>
                         <Col span={5}>
                             <Button onClick={getLogout}>Log out</Button>

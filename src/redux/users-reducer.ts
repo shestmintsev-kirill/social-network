@@ -61,6 +61,11 @@ const usersReducer = (state = initialState, action: ActionsTypes): UsersInitialS
                     ? [...state.followingInProgress, action.userId]
                     : state.followingInProgress.filter((id) => id !== action.userId)
             };
+        case 'SN/USERS/SET_PAGE_SIZE':
+            return {
+                ...state,
+                pageSize: action.size
+            };
         default:
             return state;
     }
@@ -72,6 +77,7 @@ export const actions = {
     setUsers: (users: UserType[]) => ({ type: 'SN/USERS/SET_USERS', users } as const),
     setFilter: (filter: FilterType) => ({ type: 'SN/USERS/SET_FILTER', payload: filter } as const),
     setCurrentPage: (page: number) => ({ type: 'SN/USERS/SET_CURRENT_PAGE', page } as const),
+    setPageSize: (size: number) => ({ type: 'SN/USERS/SET_PAGE_SIZE', size } as const),
     setTotalUsersCount: (count: number) => ({ type: 'SN/USERS/SET_TOTAL_USERS_COUNT', count } as const),
     toggleIsFetching: (isFetching: boolean) => ({ type: 'SN/USERS/TOGGLE_IS_FETCHING', isFetching } as const),
     toggleFollowingProgress: (isFetching: boolean, userId: number) =>
@@ -83,6 +89,7 @@ export const getUsers =
     async (dispatch, getState) => {
         dispatch(actions.toggleIsFetching(true));
         dispatch(actions.setCurrentPage(currentPage));
+        dispatch(actions.setPageSize(pageSize));
         dispatch(actions.setFilter(filter));
 
         const data = await usersAPI.getUsers(currentPage, pageSize, filter.term, filter.friend);

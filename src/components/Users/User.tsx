@@ -3,6 +3,8 @@ import userPhoto from '../../assets/images/avatar.png';
 import { Link } from 'react-router-dom';
 import { UserType } from '../../types/types';
 import { Button } from 'antd';
+import { useSelector } from 'react-redux';
+import { AppStateType } from '../../redux/redux-store';
 
 type PropsType = {
     user: UserType;
@@ -12,6 +14,8 @@ type PropsType = {
 };
 
 const User: React.FC<PropsType> = ({ user, followingInProgress, unFollow, follow }) => {
+    const ownerId = useSelector((state: AppStateType) => state.auth.userId);
+
     return (
         <div>
             <div>
@@ -36,7 +40,10 @@ const User: React.FC<PropsType> = ({ user, followingInProgress, unFollow, follow
                         </Button>
                     ) : (
                         <Button
-                            disabled={followingInProgress.some((id: number) => id === user.id)}
+                            disabled={
+                                followingInProgress.some((id: number) => id === user.id) ||
+                                user.id === ownerId
+                            }
                             onClick={() => {
                                 follow(user.id);
                             }}

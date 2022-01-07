@@ -4,7 +4,10 @@ import * as Yup from 'yup';
 import React from 'react';
 import { getUsersFilter } from '../../redux/users-selectors';
 import { useSelector } from 'react-redux';
-import { Button } from 'antd';
+import { Button, Select, Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+
+const { Option } = Select;
 
 type PropsType = {
     onFilterChanged: (filter: FilterType) => void;
@@ -39,22 +42,28 @@ const UsersSearchForm: React.FC<PropsType> = React.memo((props) => {
     });
 
     return (
-        <form onSubmit={formik.handleSubmit}>
-            <div>
-                <input
-                    name={'term'}
-                    onChange={formik.handleChange}
-                    value={formik.values.term}
-                    type={'text'}
-                />
-                <select name={'friend'} value={formik.values.friend} onChange={formik.handleChange}>
-                    <option value="null">All</option>
-                    <option value="true">Only followed</option>
-                    <option value="false">Only unfollowed</option>
-                </select>
-            </div>
-            <Button disabled={!formik.isValid} htmlType="submit">
-                Search
+        <form onSubmit={formik.handleSubmit} style={{ marginBottom: 10 }}>
+            <Input
+                name={'term'}
+                style={{ width: 230 }}
+                onChange={formik.handleChange}
+                value={formik.values.term}
+                type={'text'}
+            />
+            <Select
+                value={formik.values.friend}
+                style={{ width: 130 }}
+                onChange={(value) => {
+                    formik.setFieldValue('friend', value);
+                }}
+                onSelect={formik.handleChange}
+            >
+                <Option value="null">All</Option>
+                <Option value="true">Only followed</Option>
+                <Option value="false">Only unfollowed</Option>
+            </Select>
+            <Button style={{ marginLeft: 30 }} disabled={!formik.isValid} htmlType="submit">
+                <SearchOutlined />
             </Button>
         </form>
     );

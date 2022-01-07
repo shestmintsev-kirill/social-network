@@ -38,7 +38,7 @@ const App: React.FC = () => {
     }
 
     return (
-        <Layout>
+        <Layout style={{ minHeight: '100vh' }}>
             <Header />
             <Content style={{ padding: '0 50px' }}>
                 <Breadcrumb style={{ margin: '16px 0' }}>
