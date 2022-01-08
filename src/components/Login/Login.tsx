@@ -5,13 +5,15 @@ import * as Yup from 'yup';
 import { BaseInput } from '../common/FormsControls/FormsControls';
 import { Redirect } from 'react-router';
 import { AppStateType } from '../../redux/redux-store';
-import { Button } from 'antd';
+import { Button, message, Checkbox } from 'antd';
+import { useEffect } from 'react';
 
 const Login: React.FC = () => {
     const isAuth = useSelector((state: AppStateType) => state.auth.isAuth);
     const dispatch = useDispatch();
 
     if (isAuth) {
+        message.info('hello');
         return <Redirect to={'/profile'} />;
     }
 
@@ -45,6 +47,10 @@ type LoginFormPropsType = {
 const LoginForm: React.FC<LoginFormPropsType> = ({ authLogin }) => {
     const captcha = useSelector((state: AppStateType) => state.auth.captcha);
     const errorMessage = useSelector((state: AppStateType) => state.auth.errorMessage);
+
+    useEffect(() => {
+        if (errorMessage) message.error(errorMessage);
+    }, [errorMessage]);
 
     const validationsSchema = Yup.object<Record<keyof LoginValuesType, Yup.AnySchema>>().shape({
         email: Yup.string().email('Не валидный email').required('Логин обязателен'),
@@ -103,13 +109,13 @@ const LoginForm: React.FC<LoginFormPropsType> = ({ authLogin }) => {
                 />
             ))}
             <div>
-                <input
+                <Checkbox
+                    onChange={formik.handleChange}
                     checked={formik.values.rememberMe}
                     name={'rememberMe'}
-                    onChange={formik.handleChange}
-                    type={'checkbox'}
-                />{' '}
-                remember me
+                >
+                    remember me
+                </Checkbox>
             </div>
             {captcha && (
                 <div>

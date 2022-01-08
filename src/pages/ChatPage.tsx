@@ -1,6 +1,7 @@
 import { Input, Button } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Comment, Avatar } from 'antd';
 import {
     ChatMessageType,
     sendMessage,
@@ -69,13 +70,11 @@ const Messages: React.FC = () => {
 
 const Message: React.FC<{ message: ChatMessageType }> = React.memo(({ message }) => {
     return (
-        <div>
-            <img style={{ width: '30px' }} src={message.photo} alt="msg" />
-            <strong>{message.userName}</strong>
-            <br />
-            {message.message}
-            <hr />
-        </div>
+        <Comment
+            author={message.userName}
+            avatar={<Avatar src={message.photo} alt="photo" />}
+            content={<p>{message.message}</p>}
+        />
     );
 });
 

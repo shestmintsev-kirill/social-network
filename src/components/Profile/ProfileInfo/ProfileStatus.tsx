@@ -42,6 +42,7 @@ const ProfileStatus: React.FC<PropsType> = ({ isOwner = false }) => {
                     <Input
                         onChange={onStatusChange}
                         onBlur={deactivateEditMode}
+                        style={{ maxWidth: 400 }}
                         autoFocus
                         type="text"
                         value={profileStatus}
@@ -52,7 +53,7 @@ const ProfileStatus: React.FC<PropsType> = ({ isOwner = false }) => {
                     <span>
                         <strong>Статус:</strong> {status || 'Нет статуса'}
                     </span>
-                    <EditOutlined style={{ marginLeft: '10px' }} onClick={activateEditMode} />
+                    {isOwner && <EditOutlined style={{ marginLeft: 10 }} onClick={activateEditMode} />}
                 </div>
             )}
         </div>

@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import React, { Suspense, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import { Link, Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import './App.css';
 import Preloader from './components/common/Preloader/Preloader';
 import Header from './components/Header/Header';
@@ -20,18 +20,18 @@ const Profile = React.lazy(() => import('./pages/Profile'));
 const ChatPage = React.lazy(() => import('./pages/ChatPage'));
 
 const App: React.FC = () => {
-    const [breadcrumbItem, setBreadcrumbItem] = useState<string>('');
+    const [breadcrumbItem, setBreadcrumbItem] = useState<string | null>(null);
     const initialized = useSelector((state: AppStateType) => state.app.initialized);
     const dispatch = useDispatch();
-    const history = useHistory();
-
-    window.addEventListener('hashchange', () => {
-        setBreadcrumbItem(history.location.pathname.replace('/', ''));
-    });
+    const location = useLocation();
 
     useEffect(() => {
         dispatch(initializeApp());
     }, [dispatch]);
+
+    useEffect(() => {
+        setBreadcrumbItem(location.pathname.replace('/', ''));
+    }, [location]);
 
     if (!initialized) {
         return <Preloader />;

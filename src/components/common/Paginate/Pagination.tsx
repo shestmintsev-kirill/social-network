@@ -24,7 +24,7 @@ const PaginationBase: React.FC<PropsType> = ({
                 onChange={(page, pageSize) => {
                     onPaginationChanged(page, pageSize);
                 }}
-                pageSizeOptions={[5, 10, 50, 100]}
+                pageSizeOptions={[8, 16, 32, 96]}
             />
         </div>
     );

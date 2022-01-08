@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import { ContactsType, ProfileType } from '../../../types/types';
 import { BaseInput, InputLow } from '../../common/FormsControls/FormsControls';
-import { Button } from 'antd';
+import { Button, Checkbox } from 'antd';
 import { updateProfile } from '../../../redux/profile-reducer';
 import { useDispatch } from 'react-redux';
 
@@ -72,13 +72,13 @@ const ProfileDescriptionForm: React.FC<ProfileDescriptionFormPropsType> = ({
                 value={formik.values.aboutMe}
                 placeholder={'aboutMe'}
             />
-            <input
-                name={'lookingForAJob'}
-                checked={formik.values.lookingForAJob}
+            <Checkbox
                 onChange={formik.handleChange}
-                type={'checkbox'}
-            />{' '}
-            looking For A Job
+                checked={formik.values.lookingForAJob}
+                name={'lookingForAJob'}
+            >
+                looking For A Job
+            </Checkbox>
             {formik.values.lookingForAJob && (
                 <BaseInput
                     title={'Описание для поиска работы'}
@@ -90,7 +90,7 @@ const ProfileDescriptionForm: React.FC<ProfileDescriptionFormPropsType> = ({
             )}
             <Contacts contacts={formik.values.contacts} onChange={formik.handleChange} errors={errors} />
             <div>
-                <Button htmlType={'submit'}>Send</Button>
+                <Button htmlType={'submit'}>Save</Button>
             </div>
             {!!errors.length &&
                 errors.map((err: string, index: number) => (

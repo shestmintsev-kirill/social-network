@@ -1,10 +1,12 @@
-import s from './Users.module.css';
 import userPhoto from '../../assets/images/avatar.png';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { UserType } from '../../types/types';
-import { Button } from 'antd';
 import { useSelector } from 'react-redux';
 import { AppStateType } from '../../redux/redux-store';
+import { Card, Col, Tooltip, message, Button } from 'antd';
+import { UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
+
+const { Meta } = Card;
 
 type PropsType = {
     user: UserType;
@@ -15,51 +17,63 @@ type PropsType = {
 
 const User: React.FC<PropsType> = ({ user, followingInProgress, unFollow, follow }) => {
     const ownerId = useSelector((state: AppStateType) => state.auth.userId);
+    const history = useHistory();
 
     return (
-        <div>
-            <div>
-                <div className={s.avatarWrapper}>
-                    <Link
-                        to={{
-                            pathname: '/profile/' + user.id
-                        }}
-                    >
-                        <img src={user.photos.small ? user.photos.small : userPhoto} alt="user" />
-                    </Link>
-                </div>
-                <div>
-                    {user.followed ? (
-                        <Button
-                            disabled={followingInProgress.some((id: number) => id === user.id)}
-                            onClick={() => {
-                                unFollow(user.id);
-                            }}
-                        >
-                            Unfollow
-                        </Button>
+        <Col className="gutter-row" xl={{ span: 6 }}>
+            <Card
+                hoverable
+                style={{ minWidth: 180, maxWidth: 250 }}
+                cover={
+                    <img
+                        src={user.photos.small ? user.photos.small : userPhoto}
+                        style={{ maxWidth: 250 }}
+                        alt="user"
+                    />
+                }
+                onClick={() => {
+                    history.push('/profile/' + user.id);
+                }}
+                actions={[
+                    user.followed ? (
+                        <Tooltip placement="right" title={`Unfollow ${user.name}`}>
+                            <Button
+                                style={{ border: 0, width: '100%' }}
+                                loading={followingInProgress.some((id: number) => id === user.id)}
+                                key="unfollow"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    message.info(`You unfollow from ${user.name}`);
+                                    unFollow(user.id);
+                                }}
+                            >
+                                <UserDeleteOutlined style={{ color: '#ff7070', fontSize: 24 }} />
+                            </Button>
+                        </Tooltip>
                     ) : (
-                        <Button
-                            disabled={
-                                followingInProgress.some((id: number) => id === user.id) ||
-                                user.id === ownerId
-                            }
-                            onClick={() => {
-                                follow(user.id);
-                            }}
-                        >
-                            Follow
-                        </Button>
-                    )}
-                </div>
-            </div>
-            <div>
-                <div>
-                    <div>{user.name}</div>
-                    <div>{user.status}</div>
-                </div>
-            </div>
-        </div>
+                        <Tooltip placement="right" title={`Follow ${user.name}`}>
+                            <Button
+                                style={{ border: 0, width: '100%' }}
+                                loading={
+                                    followingInProgress.some((id: number) => id === user.id) ||
+                                    user.id === ownerId
+                                }
+                                key="follow"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    message.success(`You follow from ${user.name}`);
+                                    follow(user.id);
+                                }}
+                            >
+                                <UserAddOutlined style={{ color: '#00810d', fontSize: 24 }} />
+                            </Button>
+                        </Tooltip>
+                    )
+                ]}
+            >
+                <Meta title={user.name} description={user.status} />
+            </Card>
+        </Col>
     );
 };
 

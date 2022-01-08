@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { UserType } from '../types/types';
 
+export const apiKey = '8c4c198e-8707-4939-9726-3f8457232010';
+
 export const instance = axios.create({
     withCredentials: true,
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
     headers: {
-        'API-KEY': '8c4c198e-8707-4939-9726-3f8457232010'
+        'API-KEY': apiKey
     }
 });
 

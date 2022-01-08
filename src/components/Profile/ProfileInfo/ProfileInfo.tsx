@@ -1,14 +1,20 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import userPhoto from '../../../assets/images/avatar.png';
 import { ProfileType } from '../../../types/types';
 import Preloader from '../../common/Preloader/Preloader';
 import ProfileDescriptionForm from './ProfileDescriptionForm';
-import s from './ProfileInfo.module.css';
-import ProfileStatus from './ProfileStatus';
-import { Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { AppStateType } from '../../../redux/redux-store';
-import { getStatus, getUserProfile, savePhoto } from '../../../redux/profile-reducer';
+import { actions, getStatus, getUserProfile } from '../../../redux/profile-reducer';
+import { Card, Button, Upload, Divider, Image, message } from 'antd';
+import { UploadChangeParam } from 'antd/lib/upload';
+import { UploadFile } from 'antd/lib/upload/interface';
+import { UploadOutlined } from '@ant-design/icons';
+import ImgCrop from 'antd-img-crop';
+import { apiKey } from '../../../api/api';
+
+const { Meta } = Card;
 
 const ProfileInfo: React.FC = () => {
     const [editMode, setEditMode] = useState(false);
@@ -34,11 +40,15 @@ const ProfileInfo: React.FC = () => {
         if (errors.length) {
             setEditMode(true);
         }
-    }, [errors, authorizedUserId, errors.length]);
+        errors.forEach((err) => {
+            message.error(err);
+        });
+    }, [errors, authorizedUserId]);
 
-    const onMainPhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files?.length) {
-            dispatch(savePhoto(e.target.files[0]));
+    const onMainPhotoSelected = (info: UploadChangeParam<UploadFile<any>>) => {
+        if (info.file.response?.data?.photos) {
+            dispatch(actions.savePhotoSuccess(info.file.response?.data?.photos));
+            message.success('New photo is uploaded');
         }
     };
 
@@ -47,20 +57,34 @@ const ProfileInfo: React.FC = () => {
     }
 
     return (
-        <div>
-            <div className={s.avatar}>
-                <img
-                    style={{ width: '300px' }}
-                    src={
-                        profile?.photos?.large ||
-                        'https://www.kindpng.com/picc/m/130-1300217_user-icon-member-icon-png-transparent-png.png'
-                    }
-                    alt="avatar"
-                />
-                {!params?.userId && editMode && (
-                    <input type={'file'} accept=".png, .jpg, .jpeg" onChange={onMainPhotoSelected} />
-                )}
-            </div>
+        <Card
+            style={{ maxWidth: '100%' }}
+            cover={<Image width={300} src={profile?.photos?.large || userPhoto} />}
+            actions={[
+                <div>
+                    {!params?.userId && !editMode && (
+                        <Button onClick={() => setEditMode(true)}>Edit profile</Button>
+                    )}
+                </div>
+            ]}
+        >
+            {!params?.userId && editMode && (
+                // <input type={'file'} accept=".png, .jpg, .jpeg" onChange={onMainPhotoSelected1} />
+                <>
+                    <ImgCrop rotate>
+                        <Upload
+                            withCredentials
+                            action="https://social-network.samuraijs.com/api/1.0/profile/photo"
+                            onChange={onMainPhotoSelected}
+                            headers={{ 'API-KEY': apiKey }}
+                            showUploadList={false}
+                        >
+                            <Button icon={<UploadOutlined />}>Upload new photo</Button>
+                        </Upload>
+                    </ImgCrop>
+                    <Divider />
+                </>
+            )}
             {!editMode ? (
                 <ProfileDescription
                     profile={profile}
@@ -72,11 +96,13 @@ const ProfileInfo: React.FC = () => {
                     errors={errors}
                     authorizedUserId={authorizedUserId}
                     profile={profile}
-                    closeEditMode={() => setEditMode(false)}
+                    closeEditMode={() => {
+                        setEditMode(false);
+                        message.success('Profile is saved');
+                    }}
                 />
             )}
-            <ProfileStatus isOwner={!params?.userId} />
-        </div>
+        </Card>
     );
 };
 
@@ -88,36 +114,19 @@ type ProfileDescriptionPropsType = {
 
 const ProfileDescription: React.FC<ProfileDescriptionPropsType> = ({ profile, isOwner, goToEditMode }) => {
     const profileContacts = Object.entries(profile?.contacts).map((contact: string[], index: number) => {
-        return contact[1] ? (
-            <li key={index}>
-                <strong>{contact[0]}: </strong>
-                {contact[1]}
-            </li>
-        ) : (
-            false
-        );
+        const [name, value] = contact;
+        return value ? <Meta key={index} title={name} description={value} /> : false;
     });
 
     return (
-        <form>
-            {isOwner && <Button onClick={goToEditMode}>Edit profile</Button>}
-            <p>
-                <strong>Имя:</strong> {profile?.fullName}
-            </p>
-            {profile?.aboutMe && (
-                <p>
-                    <strong>Обо мне: </strong>
-                    {profile?.aboutMe}
-                </p>
-            )}
+        <div>
+            <Meta title={`Имя: ${profile?.fullName}`} />
+            {profile?.aboutMe && <Meta title={`Обо мне: ${profile?.aboutMe}`} />}
             {profile?.lookingForAJob && (
-                <p>
-                    <strong>В поиске работы: </strong>
-                    {profile?.lookingForAJobDescription}
-                </p>
+                <Meta title={`В поиске работы: ${profile?.lookingForAJobDescription}`} />
             )}
-            {<ul>{profileContacts}</ul>}
-        </form>
+            {profileContacts}
+        </div>
     );
 };
 
