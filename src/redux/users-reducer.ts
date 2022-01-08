@@ -3,6 +3,7 @@ import { UserType } from './../types/types';
 import { Dispatch } from 'redux';
 import { usersAPI } from '../api/users-api';
 import { APIResponseType } from '../api/api';
+import { message } from 'antd';
 
 const initialState = {
     users: [] as UserType[],
@@ -120,7 +121,7 @@ const _followUnfollowFlow = async (
     const data = await apiMethod(userId);
     if (data.resultCode === 0) {
         dispatch(actions.setFollowUnfollow(userId, followStatus));
-    }
+    } else message.info(`An error occurred in the process`);
     dispatch(actions.toggleFollowingProgress(false, userId));
 };
 

@@ -18,6 +18,7 @@ const { Content, Footer, Sider } = Layout;
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const Profile = React.lazy(() => import('./pages/Profile'));
 const ChatPage = React.lazy(() => import('./pages/ChatPage'));
+const ErrorPage = React.lazy(() => import('./pages/ErrorPage'));
 
 const App: React.FC = () => {
     const [breadcrumbItem, setBreadcrumbItem] = useState<string | null>(null);
@@ -90,7 +91,7 @@ const App: React.FC = () => {
                                     <ChatPage />
                                 </Route>
                                 <Route path="*">
-                                    <div>404 not found</div>
+                                    <ErrorPage />
                                 </Route>
                             </Switch>
                         </Suspense>

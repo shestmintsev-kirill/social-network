@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from 'antd';
-import { updateStatus } from '../../../redux/profile-reducer';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppStateType } from '../../../redux/redux-store';
+import { useDispatch } from 'react-redux';
 import { EditOutlined } from '@ant-design/icons';
 
 type PropsType = {
     isOwner?: boolean;
+    status: string;
+    updateStatus?: (status: string) => void;
 };
-const ProfileStatus: React.FC<PropsType> = ({ isOwner = false }) => {
-    const status = useSelector((state: AppStateType) => state.profilePage.status);
+const ProfileStatus: React.FC<PropsType> = ({ isOwner = false, status, updateStatus = (x) => x }) => {
     const [editMode, setEditMode] = useState(false);
-    const [profileStatus, setStatus] = useState(status);
+    const [profileStatus, setStatus] = useState<string>(status);
     const dispatch = useDispatch();
 
     useEffect(() => {

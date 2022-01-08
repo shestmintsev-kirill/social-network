@@ -1,6 +1,7 @@
 import { BaseThunkType, InferActionsTypes } from './redux-store';
 import { profileAPI } from '../api/profile-api';
 import { PostType, ProfileType, PhotosType } from './../types/types';
+import { message } from 'antd';
 
 const initialState = {
     posts: [
@@ -106,6 +107,7 @@ export const updateProfile =
         if (data.resultCode === 0) {
             dispatch(getUserProfile(profileData.userId));
             dispatch(actions.setError([]));
+            message.success('Profile is saved');
         } else {
             dispatch(actions.setError(data.messages));
         }

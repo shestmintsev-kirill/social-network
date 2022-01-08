@@ -13,7 +13,6 @@ const Login: React.FC = () => {
     const dispatch = useDispatch();
 
     if (isAuth) {
-        message.info('hello');
         return <Redirect to={'/profile'} />;
     }
 
@@ -76,6 +75,7 @@ const LoginForm: React.FC<LoginFormPropsType> = ({ authLogin }) => {
         onSubmit: (values: any, { resetForm }) => {
             authLogin(values);
             values.captcha = '';
+
             // errorMessage && resetForm();
         },
         validationSchema: validationsSchema

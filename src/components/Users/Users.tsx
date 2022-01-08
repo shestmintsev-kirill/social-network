@@ -17,7 +17,7 @@ import Pagination from '../common/Paginate/Pagination';
 import Preloader from '../common/Preloader/Preloader';
 import User from './User';
 import UsersSearchForm from './UsersSearchForm';
-import { Row } from 'antd';
+import { Row, BackTop } from 'antd';
 
 type QueryParamsType = {
     term?: string;
@@ -96,17 +96,20 @@ const Users: React.FC = () => {
             {isFetching && <Preloader />}
 
             {!isFetching && (
-                <Row gutter={[16, 24]}>
-                    {users.map((user: UserType) => (
-                        <User
-                            user={user}
-                            followingInProgress={followingInProgress}
-                            unFollow={unFollow}
-                            follow={follow}
-                            key={user.id}
-                        />
-                    ))}
-                </Row>
+                <>
+                    <Row gutter={[16, 24]}>
+                        {users.map((user: UserType) => (
+                            <User
+                                user={user}
+                                followingInProgress={followingInProgress}
+                                unFollow={unFollow}
+                                follow={follow}
+                                key={user.id}
+                            />
+                        ))}
+                    </Row>
+                    <BackTop />
+                </>
             )}
         </div>
     );

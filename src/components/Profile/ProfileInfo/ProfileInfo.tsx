@@ -6,13 +6,14 @@ import ProfileDescriptionForm from './ProfileDescriptionForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { AppStateType } from '../../../redux/redux-store';
-import { actions, getStatus, getUserProfile } from '../../../redux/profile-reducer';
+import { actions, getStatus, getUserProfile, updateStatus } from '../../../redux/profile-reducer';
 import { Card, Button, Upload, Divider, Image, message } from 'antd';
 import { UploadChangeParam } from 'antd/lib/upload';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { UploadOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
 import { apiKey } from '../../../api/api';
+import ProfileStatus from './ProfileStatus';
 
 const { Meta } = Card;
 
@@ -43,7 +44,7 @@ const ProfileInfo: React.FC = () => {
         errors.forEach((err) => {
             message.error(err);
         });
-    }, [errors, authorizedUserId]);
+    }, [errors]);
 
     const onMainPhotoSelected = (info: UploadChangeParam<UploadFile<any>>) => {
         if (info.file.response?.data?.photos) {
@@ -86,11 +87,13 @@ const ProfileInfo: React.FC = () => {
                 </>
             )}
             {!editMode ? (
-                <ProfileDescription
-                    profile={profile}
-                    isOwner={!params?.userId}
-                    goToEditMode={() => setEditMode(true)}
-                />
+                <>
+                    <ProfileDescription
+                        profile={profile}
+                        isOwner={!params?.userId}
+                        goToEditMode={() => setEditMode(true)}
+                    />
+                </>
             ) : (
                 <ProfileDescriptionForm
                     errors={errors}
@@ -98,7 +101,6 @@ const ProfileInfo: React.FC = () => {
                     profile={profile}
                     closeEditMode={() => {
                         setEditMode(false);
-                        message.success('Profile is saved');
                     }}
                 />
             )}
@@ -113,6 +115,8 @@ type ProfileDescriptionPropsType = {
 };
 
 const ProfileDescription: React.FC<ProfileDescriptionPropsType> = ({ profile, isOwner, goToEditMode }) => {
+    const status = useSelector((state: AppStateType) => state.profilePage.status);
+
     const profileContacts = Object.entries(profile?.contacts).map((contact: string[], index: number) => {
         const [name, value] = contact;
         return value ? <Meta key={index} title={name} description={value} /> : false;
@@ -125,6 +129,7 @@ const ProfileDescription: React.FC<ProfileDescriptionPropsType> = ({ profile, is
             {profile?.lookingForAJob && (
                 <Meta title={`В поиске работы: ${profile?.lookingForAJobDescription}`} />
             )}
+            <ProfileStatus isOwner={isOwner} status={status} updateStatus={updateStatus} />
             {profileContacts}
         </div>
     );

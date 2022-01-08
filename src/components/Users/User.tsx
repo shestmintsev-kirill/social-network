@@ -43,8 +43,8 @@ const User: React.FC<PropsType> = ({ user, followingInProgress, unFollow, follow
                                 key="unfollow"
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    message.info(`You unfollow from ${user.name}`);
                                     unFollow(user.id);
+                                    message.info(`You unfollow from ${user.name}`);
                                 }}
                             >
                                 <UserDeleteOutlined style={{ color: '#ff7070', fontSize: 24 }} />
@@ -61,8 +61,8 @@ const User: React.FC<PropsType> = ({ user, followingInProgress, unFollow, follow
                                 key="follow"
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    message.success(`You follow from ${user.name}`);
                                     follow(user.id);
+                                    message.success(`You follow from ${user.name}`);
                                 }}
                             >
                                 <UserAddOutlined style={{ color: '#00810d', fontSize: 24 }} />

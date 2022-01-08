@@ -1,4 +1,4 @@
-import { UserOutlined } from '@ant-design/icons';
+import mockPhoto from '../../assets/images/avatar.png';
 import { Avatar, Col, Layout, Menu, Row, Button, Tooltip } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
@@ -12,6 +12,7 @@ const Header: React.FC = () => {
     const dispatch = useDispatch();
     const isAuth = useSelector((state: AppStateType) => state.auth.isAuth);
     const login = useSelector((state: AppStateType) => state.auth.login);
+    const photo = useSelector((state: AppStateType) => state.auth.meProfile?.photos?.large);
 
     const getLogout = async () => {
         await dispatch(logout());
@@ -33,7 +34,9 @@ const Header: React.FC = () => {
                     <>
                         <Col span={1}>
                             <Tooltip placement="bottom" title={login || ''}>
-                                <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+                                <Link to={'/profile'}>
+                                    <Avatar src={photo || mockPhoto} />
+                                </Link>
                             </Tooltip>
                         </Col>
                         <Col span={5}>

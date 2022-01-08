@@ -1,6 +1,9 @@
+import { ProfileType } from './../types/types';
 import { ResultCodeEnum, ResultCodeForCaptcha } from '../api/api';
 import { authAPI } from '../api/auth-api';
 import { BaseThunkType, InferActionsTypes } from './redux-store';
+import { message } from 'antd';
+import { profileAPI } from '../api/profile-api';
 
 const initialState = {
     userId: null as number | null,
@@ -8,7 +11,8 @@ const initialState = {
     login: null as string | null,
     isAuth: false as boolean,
     errorMessage: null as string | null,
-    captcha: null as string | null
+    captcha: null as string | null,
+    meProfile: null as ProfileType | null
 };
 
 const authReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
@@ -32,6 +36,11 @@ const authReducer = (state = initialState, action: ActionsTypes): InitialStateTy
                 ...state,
                 captcha: action.captcha
             };
+        case 'SN/AUTH/SET_ME_PROFILE':
+            return {
+                ...state,
+                meProfile: action.profile
+            };
         default:
             return state;
     }
@@ -42,7 +51,8 @@ const actions = {
         ({ type: 'SN/AUTH/SET_USER_DATA', payload: { userId, email, login, isAuth } } as const),
     setCaptcha: (captcha: string | null) => ({ type: 'SN/AUTH/SET_CAPTCHA', captcha } as const),
     setLogoutUserData: () => ({ type: 'SN/AUTH/SET_LOGOUT_USER_DATA' } as const),
-    setError: (error: string) => ({ type: 'SN/AUTH/SET_ERROR', error } as const)
+    setError: (error: string) => ({ type: 'SN/AUTH/SET_ERROR', error } as const),
+    setMeProfile: (profile: ProfileType) => ({ type: 'SN/AUTH/SET_ME_PROFILE', profile } as const)
 };
 
 export const getAuthUserData = (): ThunkType => async (dispatch) => {
@@ -50,15 +60,24 @@ export const getAuthUserData = (): ThunkType => async (dispatch) => {
     if (data.resultCode === 0) {
         const { id, login, email } = data.data;
         dispatch(actions.setAuthUserData(id, email, login, true));
+        dispatch(getMeProfile(id));
     }
 };
 
+export const getMeProfile =
+    (userId: number): ThunkType =>
+    async (dispatch) => {
+        const data = await profileAPI.getUserProfile(userId);
+        dispatch(actions.setMeProfile(data));
+    };
+
 export const login =
     (loginData: loginData): ThunkType =>
-    async (dispatch) => {
+    async (dispatch, getState) => {
         const data = await authAPI.login(loginData);
         if (data.resultCode === ResultCodeEnum.Success) {
-            dispatch(getAuthUserData());
+            await dispatch(getAuthUserData());
+            message.info(`Hello ${getState().auth.login}!`);
         } else {
             dispatch(actions.setError(data.messages.length ? data.messages[0] : 'Some error'));
             !data?.fieldsErrors?.length && dispatch(actions.setCaptcha(null));
@@ -73,7 +92,8 @@ export const getCaptcha = (): ThunkType => async (dispatch) => {
     dispatch(actions.setCaptcha(res.data.url));
 };
 
-export const logout = (): ThunkType => async (dispatch) => {
+export const logout = (): ThunkType => async (dispatch, getState) => {
+    message.info(`Bye ${getState().auth.login}!`);
     const data = await authAPI.logout();
     if (data.resultCode === 0) {
         dispatch(actions.setLogoutUserData());
