@@ -23,7 +23,7 @@ const User: React.FC<PropsType> = ({ user, followingInProgress, unFollow, follow
         <Col className="gutter-row" xl={{ span: 6 }}>
             <Card
                 hoverable
-                style={{ minWidth: 180, maxWidth: 250 }}
+                style={{ width: 210 }}
                 cover={
                     <img
                         src={user.photos.small ? user.photos.small : userPhoto}

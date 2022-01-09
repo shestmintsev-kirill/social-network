@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
+import photoMock from '../../assets/images/avatar.png';
 import s from './Dialogs.module.css';
-import DialogItem from './DialogItem/DialogItem';
-import Message from './Message/Message';
 import { useFormik } from 'formik';
 import { Textarea } from '../common/FormsControls/FormsControls';
 import { DialogType, InitialDialogsStateType, MessageType } from '../../redux/dialogs-reducer';
-import { Button } from 'antd';
+import { Button, Comment, Avatar, Divider } from 'antd';
 
 type DialogsPropsType = {
     dialogsPage: InitialDialogsStateType;
@@ -13,13 +12,25 @@ type DialogsPropsType = {
 };
 
 const Dialogs: React.FC<DialogsPropsType> = (props) => {
-    const state = props.dialogsPage;
+    const [currentUser, setCurrentUser] = useState<number>(0);
 
-    const dialogsElements = state.dialogs.map((d: DialogType) => (
-        <DialogItem name={d.name} id={d.id} key={d.id} />
+    const dialogsElements = props.dialogsPage.dialogs.map((d: DialogType) => (
+        <div key={d.id} className={s.dialog}>
+            <Button style={{ width: 80 }} onClick={() => setCurrentUser(d.id - 1)}>
+                {d.name}
+            </Button>
+        </div>
     ));
-    const messagesElements = state.messages.map((m: MessageType, i: number) => (
-        <Message message={m.message} key={i} />
+
+    const messagesElements = props.dialogsPage.messages.map((m: MessageType, index: number) => (
+        <div key={index}>
+            <Comment
+                author={props.dialogsPage.dialogs[currentUser].name}
+                avatar={<Avatar src={photoMock} alt="photo" />}
+                content={<p>{m.message}</p>}
+            />
+            <Divider />
+        </div>
     ));
 
     const addNewMessage = (values: MessageValuesType) => {

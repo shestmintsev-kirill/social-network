@@ -1,4 +1,4 @@
-import { Input, Button } from 'antd';
+import { Input, Button, Skeleton } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Comment, Avatar } from 'antd';
@@ -17,7 +17,6 @@ const ChatPage: React.FC = () => {
 
 const Chat: React.FC = () => {
     const dispatch = useDispatch();
-
     const status = useSelector((state: AppStateType) => state.chat.status);
 
     useEffect(() => {
@@ -40,6 +39,7 @@ const Chat: React.FC = () => {
 
 const Messages: React.FC = () => {
     const messages = useSelector((state: AppStateType) => state.chat.messages);
+    console.log(messages);
     const messageAnchorRef = useRef<HTMLDivElement>(null);
     const [isAutoScroll, setIsAutoScroll] = useState(true);
 
@@ -57,6 +57,16 @@ const Messages: React.FC = () => {
             messageAnchorRef.current?.scrollIntoView({ behavior: 'smooth' });
         }
     }, [isAutoScroll, messages]);
+
+    if (!messages.length) {
+        return (
+            <>
+                {Array.from(Array(3)).map((a, i) => (
+                    <Skeleton active avatar key={i} />
+                ))}
+            </>
+        );
+    }
 
     return (
         <div style={{ height: '400px', overflowY: 'auto' }} onScroll={scrollHandler}>

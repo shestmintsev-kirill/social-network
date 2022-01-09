@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Preloader from './components/common/Preloader/Preloader';
 import Header from './components/Header/Header';
@@ -9,11 +9,11 @@ import Login from './components/Login/Login';
 import Users from './components/Users/Users';
 import { initializeApp } from './redux/app-reducer';
 import { AppStateType } from './redux/redux-store';
-import { LaptopOutlined, UserOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu } from 'antd';
+import { Layout, Skeleton } from 'antd';
+import Navbar from './components/Navbar/Navbar';
+import BreadCrumb from './components/Breadcrumb/BreadCrumb';
 
-const { SubMenu } = Menu;
-const { Content, Footer, Sider } = Layout;
+const { Content, Footer } = Layout;
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const Profile = React.lazy(() => import('./pages/Profile'));
@@ -21,56 +21,26 @@ const ChatPage = React.lazy(() => import('./pages/ChatPage'));
 const ErrorPage = React.lazy(() => import('./pages/ErrorPage'));
 
 const App: React.FC = () => {
-    const [breadcrumbItem, setBreadcrumbItem] = useState<string | null>(null);
     const initialized = useSelector((state: AppStateType) => state.app.initialized);
     const dispatch = useDispatch();
-    const location = useLocation();
 
     useEffect(() => {
         dispatch(initializeApp());
     }, [dispatch]);
-
-    useEffect(() => {
-        setBreadcrumbItem(location.pathname.replace('/', ''));
-    }, [location]);
 
     if (!initialized) {
         return <Preloader />;
     }
 
     return (
-        <Layout style={{ minHeight: '100vh' }}>
+        <Layout style={{ height: '100vh' }}>
             <Header />
-            <Content style={{ padding: '0 50px' }}>
-                <Breadcrumb style={{ margin: '16px 0' }}>
-                    <Breadcrumb.Item>
-                        <Link to="/profile">Home</Link>
-                    </Breadcrumb.Item>
-                    {breadcrumbItem !== 'profile' && <Breadcrumb.Item>{breadcrumbItem}</Breadcrumb.Item>}
-                </Breadcrumb>
-                <Layout className="site-layout-background" style={{ padding: '24px 0' }}>
-                    <Sider className="site-layout-background" width={200}>
-                        <Menu mode="inline" defaultSelectedKeys={['1']} style={{ height: '100%' }}>
-                            <SubMenu key="sub1" icon={<UserOutlined />} title="My profile">
-                                <Menu.Item key="1">
-                                    <Link to="/profile">Profile</Link>
-                                </Menu.Item>
-                                <Menu.Item key="2">
-                                    <Link to="/dialogs">Messages</Link>
-                                </Menu.Item>
-                                <Menu.Item key="3">
-                                    <Link to="/chat">Chat</Link>
-                                </Menu.Item>
-                            </SubMenu>
-                            <SubMenu key="sub2" icon={<LaptopOutlined />} title="Developers">
-                                <Menu.Item key="5">
-                                    <Link to="/developers">Developers</Link>
-                                </Menu.Item>
-                            </SubMenu>
-                        </Menu>
-                    </Sider>
-                    <Content style={{ padding: '0 24px', minHeight: 280 }}>
-                        <Suspense fallback={<Preloader />}>
+            <Content style={{ height: '100%' }}>
+                <Layout className="site-layout-background" style={{ minHeight: '100%' }}>
+                    <Navbar />
+                    <Content style={{ padding: '0 24px', minHeight: '100%' }}>
+                        <BreadCrumb />
+                        <Suspense fallback={<Skeleton active paragraph={{ rows: 6 }} />}>
                             <Switch>
                                 <Route exact path="/">
                                     <Redirect from="/" to="/profile" />
@@ -95,10 +65,10 @@ const App: React.FC = () => {
                                 </Route>
                             </Switch>
                         </Suspense>
+                        <Footer style={{ textAlign: 'center' }}>Sosial network 2022</Footer>
                     </Content>
                 </Layout>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Sosial network 2022</Footer>
         </Layout>
     );
 };

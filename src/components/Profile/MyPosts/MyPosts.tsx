@@ -3,21 +3,28 @@ import { PostType } from '../../../types/types';
 import { Textarea } from '../../common/FormsControls/FormsControls';
 import s from './MyPosts.module.css';
 import Post from './Post/Post';
-import { Button } from 'antd';
+import { Button, Skeleton } from 'antd';
+import { AppStateType } from '../../../redux/redux-store';
+import { useDispatch, useSelector } from 'react-redux';
+import { actions } from '../../../redux/profile-reducer';
 
-type MyPostsPropsType = {
-    posts: PostType[];
-    newPostText: string;
-    addPost: (post: string) => void;
-};
-const MyPosts: React.FC<MyPostsPropsType> = (props) => {
-    const postsElements = props.posts.map((p: PostType, i: number) => (
+const MyPosts: React.FC = () => {
+    const dispatch = useDispatch();
+    const profile = useSelector((state: AppStateType) => state.profilePage.profile);
+    const posts = useSelector((state: AppStateType) => state.profilePage.posts);
+
+    const postsElements = posts.map((p: PostType, i: number) => (
         <Post message={p.message} likesCount={p.likesCount} key={i} />
     ));
 
     const addNewPost = (values: PostFormValues) => {
-        props.addPost(values.post);
+        dispatch(actions.addPost(values.post));
     };
+
+    if (!profile) {
+        return <Skeleton avatar active style={{ position: 'absolute', bottom: 100 }} />;
+    }
+
     return (
         <div className={s.postsBlock}>
             <h3>My posts</h3>

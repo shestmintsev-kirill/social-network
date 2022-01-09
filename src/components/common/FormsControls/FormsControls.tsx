@@ -36,7 +36,7 @@ export const BaseInput: React.FC<InputPropsType> = (props) => {
 
 export const InputLow: React.FC<InputPropsType> = (props) => {
     return (
-        <div className={s.inputWrapperLow}>
+        <div>
             <label htmlFor={props.htmlFor} style={{ color: props.isError && 'red' }}>
                 {props.title}
             </label>

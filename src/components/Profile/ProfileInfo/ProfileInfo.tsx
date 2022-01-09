@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import userPhoto from '../../../assets/images/avatar.png';
 import { ProfileType } from '../../../types/types';
-import Preloader from '../../common/Preloader/Preloader';
 import ProfileDescriptionForm from './ProfileDescriptionForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { AppStateType } from '../../../redux/redux-store';
 import { actions, getStatus, getUserProfile, updateStatus } from '../../../redux/profile-reducer';
-import { Card, Button, Upload, Divider, Image, message } from 'antd';
+import { Card, Button, Upload, Divider, Image, message, Skeleton, Descriptions } from 'antd';
 import { UploadChangeParam } from 'antd/lib/upload';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { UploadOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
 import { apiKey } from '../../../api/api';
 import ProfileStatus from './ProfileStatus';
-
-const { Meta } = Card;
 
 const ProfileInfo: React.FC = () => {
     const [editMode, setEditMode] = useState(false);
@@ -54,13 +51,17 @@ const ProfileInfo: React.FC = () => {
     };
 
     if (!profile) {
-        return <Preloader />;
+        return <Skeleton active />;
     }
 
     return (
         <Card
             style={{ maxWidth: '100%' }}
-            cover={<Image width={300} src={profile?.photos?.large || userPhoto} />}
+            cover={
+                <div>
+                    <Image style={{ maxWidth: '300px' }} src={profile?.photos?.large || userPhoto} />
+                </div>
+            }
             actions={[
                 <div>
                     {!params?.userId && !editMode && (
@@ -88,11 +89,7 @@ const ProfileInfo: React.FC = () => {
             )}
             {!editMode ? (
                 <>
-                    <ProfileDescription
-                        profile={profile}
-                        isOwner={!params?.userId}
-                        goToEditMode={() => setEditMode(true)}
-                    />
+                    <ProfileDescription profile={profile} isOwner={!params?.userId} />
                 </>
             ) : (
                 <ProfileDescriptionForm
@@ -111,27 +108,44 @@ const ProfileInfo: React.FC = () => {
 type ProfileDescriptionPropsType = {
     profile: ProfileType;
     isOwner: boolean;
-    goToEditMode: () => void;
 };
 
-const ProfileDescription: React.FC<ProfileDescriptionPropsType> = ({ profile, isOwner, goToEditMode }) => {
+const ProfileDescription: React.FC<ProfileDescriptionPropsType> = ({ profile, isOwner }) => {
     const status = useSelector((state: AppStateType) => state.profilePage.status);
 
     const profileContacts = Object.entries(profile?.contacts).map((contact: string[], index: number) => {
         const [name, value] = contact;
-        return value ? <Meta key={index} title={name} description={value} /> : false;
+        return (
+            value && (
+                <div key={index}>
+                    <a href={value} target="_blank" style={{ whiteSpace: 'nowrap' }} rel="noreferrer">
+                        {name}
+                    </a>
+                </div>
+            )
+        );
     });
 
     return (
-        <div>
-            <Meta title={`Имя: ${profile?.fullName}`} />
-            {profile?.aboutMe && <Meta title={`Обо мне: ${profile?.aboutMe}`} />}
-            {profile?.lookingForAJob && (
-                <Meta title={`В поиске работы: ${profile?.lookingForAJobDescription}`} />
-            )}
+        <>
             <ProfileStatus isOwner={isOwner} status={status} updateStatus={updateStatus} />
-            {profileContacts}
-        </div>
+            <Descriptions bordered>
+                <Descriptions.Item style={{ whiteSpace: 'nowrap' }} label="Name">
+                    {profile?.fullName}
+                </Descriptions.Item>
+                {profile?.aboutMe && (
+                    <Descriptions.Item label="About me">{profile?.aboutMe}</Descriptions.Item>
+                )}
+                {profile?.lookingForAJob && (
+                    <Descriptions.Item label="Looking for a job description">
+                        {profile?.lookingForAJobDescription}
+                    </Descriptions.Item>
+                )}
+                {profileContacts.some((p) => !!p) && (
+                    <Descriptions.Item label="Contacts">{profileContacts}</Descriptions.Item>
+                )}
+            </Descriptions>
+        </>
     );
 };
 

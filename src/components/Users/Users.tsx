@@ -14,10 +14,9 @@ import {
 } from '../../redux/users-selectors';
 import { UserType } from '../../types/types';
 import Pagination from '../common/Paginate/Pagination';
-import Preloader from '../common/Preloader/Preloader';
 import User from './User';
 import UsersSearchForm from './UsersSearchForm';
-import { Row, BackTop } from 'antd';
+import { Row, BackTop, Skeleton } from 'antd';
 
 type QueryParamsType = {
     term?: string;
@@ -93,7 +92,7 @@ const Users: React.FC = () => {
                 pageSize={pageSize}
             />
 
-            {isFetching && <Preloader />}
+            {isFetching && <Skeleton active paragraph={{ rows: 10 }} />}
 
             {!isFetching && (
                 <>

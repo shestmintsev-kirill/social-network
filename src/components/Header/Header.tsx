@@ -22,8 +22,8 @@ const Header: React.FC = () => {
     return (
         <Header>
             <div className="logo" />
-            <Row>
-                <Col span={18}>
+            <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Col>
                     <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
                         <Menu.Item key="1">
                             <Link to="/developers">Developers</Link>
@@ -31,20 +31,20 @@ const Header: React.FC = () => {
                     </Menu>
                 </Col>
                 {isAuth ? (
-                    <>
-                        <Col span={1}>
+                    <div style={{ display: 'flex' }}>
+                        <Col>
                             <Tooltip placement="bottom" title={login || ''}>
-                                <Link to={'/profile'}>
+                                <Link to={'/profile'} style={{ marginRight: 15 }}>
                                     <Avatar src={photo || mockPhoto} />
                                 </Link>
                             </Tooltip>
                         </Col>
-                        <Col span={5}>
+                        <Col>
                             <Button onClick={getLogout}>Log out</Button>
                         </Col>
-                    </>
+                    </div>
                 ) : (
-                    <Col span={6}>
+                    <Col>
                         <Button>
                             <Link to="/login">Login</Link>
                         </Button>

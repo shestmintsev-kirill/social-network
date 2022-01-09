@@ -37,7 +37,7 @@ const ProfileStatus: React.FC<PropsType> = ({ isOwner = false, status, updateSta
         <div>
             {editMode ? (
                 <div>
-                    Статус:{' '}
+                    <strong>Status:</strong>{' '}
                     <Input
                         onChange={onStatusChange}
                         onBlur={deactivateEditMode}
@@ -50,7 +50,7 @@ const ProfileStatus: React.FC<PropsType> = ({ isOwner = false, status, updateSta
             ) : (
                 <div>
                     <span>
-                        <strong>Статус:</strong> {status || 'Нет статуса'}
+                        <strong>Status:</strong> {status || 'Нет статуса'}
                     </span>
                     {isOwner && <EditOutlined style={{ marginLeft: 10 }} onClick={activateEditMode} />}
                 </div>

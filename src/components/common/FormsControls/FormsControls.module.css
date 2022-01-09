@@ -1,12 +1,7 @@
-.inputWrapperLow .input {
-    margin: 15px 0;
-}
-
 .input {
     width: 70%;
     margin: 5px 0 10px 0;
-    padding: 10px;
-    border-radius: 15px;
+    border-radius: 10px;
 }
 
 .inputError {
