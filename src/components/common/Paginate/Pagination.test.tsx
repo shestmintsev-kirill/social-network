@@ -6,13 +6,8 @@ describe('Pagination component tests', () => {
         const component = create(<Pagination totalUsersCount={11} pageSize={1} portionSize={10} />);
         const root = component.root;
         const spans = root.findAllByType('div');
-        expect(spans.length).toBe(1);
-    });
-
-    test('if pages count is more then 10 button NEXT should be present', () => {
-        const component = create(<Pagination totalUsersCount={11} pageSize={1} portionSize={10} />);
-        const root = component.root;
         const button = root.findAllByType('button');
-        expect(button.length).toBe(3);
+        expect(spans.length).toBe(2);
+        expect(button.length).toBe(2);
     });
 });
