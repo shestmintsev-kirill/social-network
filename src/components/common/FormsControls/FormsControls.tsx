@@ -18,7 +18,9 @@ type InputPropsType = {
 export const BaseInput: React.FC<InputPropsType> = (props) => {
     return (
         <div className={s.inputWrapper}>
-            <label htmlFor={props.htmlFor}>{props.title}</label>
+            <label style={{ fontWeight: 'bold' }} htmlFor={props.htmlFor}>
+                {props.title}
+            </label>
             <br />
             <Input
                 className={`${s.input} ${props.touched && props.errors && s.inputError}`}
@@ -37,7 +39,7 @@ export const BaseInput: React.FC<InputPropsType> = (props) => {
 export const InputLow: React.FC<InputPropsType> = (props) => {
     return (
         <div>
-            <label htmlFor={props.htmlFor} style={{ color: props.isError && 'red' }}>
+            <label htmlFor={props.htmlFor} style={{ color: props.isError && 'red', fontWeight: 'bold' }}>
                 {props.title}
             </label>
             <br />

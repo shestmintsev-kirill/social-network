@@ -39,7 +39,6 @@ const Chat: React.FC = () => {
 
 const Messages: React.FC = () => {
     const messages = useSelector((state: AppStateType) => state.chat.messages);
-    console.log(messages);
     const messageAnchorRef = useRef<HTMLDivElement>(null);
     const [isAutoScroll, setIsAutoScroll] = useState(true);
 
