@@ -15,7 +15,7 @@ import BreadCrumb from './components/Breadcrumb/BreadCrumb';
 
 const { Content, Footer } = Layout;
 
-const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
+const Dialogs = React.lazy(() => import('./components/Dialogs/Dialogs'));
 const Profile = React.lazy(() => import('./pages/Profile'));
 const ChatPage = React.lazy(() => import('./pages/ChatPage'));
 const ErrorPage = React.lazy(() => import('./pages/ErrorPage'));
@@ -46,7 +46,7 @@ const App: React.FC = () => {
                                     <Redirect from="/" to="/profile" />
                                 </Route>
                                 <Route path="/dialogs">
-                                    <DialogsContainer />
+                                    <Dialogs />
                                 </Route>
                                 <Route path="/profile/:userId?">
                                     <Profile />

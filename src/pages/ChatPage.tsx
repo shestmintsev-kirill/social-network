@@ -9,9 +9,13 @@ import {
     stopMessagesListening
 } from '../redux/chat-reducer';
 import { AppStateType } from '../redux/redux-store';
+import { useIsAuth } from '../Hooks/useIsAuth';
+
 const { TextArea } = Input;
 
 const ChatPage: React.FC = () => {
+    useIsAuth();
+
     return <Chat />;
 };
 
