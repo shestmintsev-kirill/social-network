@@ -14,8 +14,8 @@ const Header: React.FC = () => {
     const login = useSelector((state: AppStateType) => state.auth.login);
     const photo = useSelector((state: AppStateType) => state.auth.meProfile?.photos?.large);
 
-    const getLogout = async () => {
-        await dispatch(logout());
+    const getLogout = () => {
+        dispatch(logout());
         history.push('/login');
     };
 

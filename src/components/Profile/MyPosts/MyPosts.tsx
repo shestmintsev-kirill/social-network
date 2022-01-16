@@ -9,17 +9,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../redux/profile-reducer';
 
 const MyPosts: React.FC = () => {
-    const dispatch = useDispatch();
     const profile = useSelector((state: AppStateType) => state.profilePage.profile);
     const posts = useSelector((state: AppStateType) => state.profilePage.posts);
 
     const postsElements = posts.map((p: PostType, i: number) => (
         <Post message={p.message} likesCount={p.likesCount} key={i} />
     ));
-
-    const addNewPost = (values: PostFormValues) => {
-        dispatch(actions.addPost(values.post));
-    };
 
     if (!profile) {
         return <Skeleton avatar active style={{ position: 'absolute', bottom: 100 }} />;
@@ -29,7 +24,7 @@ const MyPosts: React.FC = () => {
         <div className={s.postsBlock}>
             <h3>My posts</h3>
             <div>
-                <PostForm addNewPost={addNewPost} />
+                <PostForm />
             </div>
             <div className={s.posts}>{postsElements}</div>
         </div>
@@ -40,17 +35,15 @@ type PostFormValues = {
     post: string;
 };
 
-type PostFormPropsType = {
-    addNewPost: (values: PostFormValues) => void;
-};
+const PostForm: React.FC = () => {
+    const dispatch = useDispatch();
 
-const PostForm: React.FC<PostFormPropsType> = (props) => {
     const formik = useFormik({
         initialValues: {
             post: ''
         },
         onSubmit: (values: PostFormValues, { resetForm }) => {
-            props.addNewPost(values);
+            dispatch(actions.addPost(values.post));
             resetForm();
         }
     });

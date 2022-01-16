@@ -1,4 +1,4 @@
-import React, { createElement, useState } from 'react';
+import React, { useState } from 'react';
 import { Comment, Tooltip, Avatar } from 'antd';
 import moment from 'moment';
 import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons';
@@ -19,7 +19,7 @@ const Post: React.FC<PropsType> = (props) => {
     const userName = useSelector((state: AppStateType) => state.profilePage.profile?.fullName);
 
     const like = () => {
-        setLikes(props.likesCount + 1);
+        setLikes((prev) => prev + 1);
         setDislikes(0);
         setAction('liked');
     };
@@ -33,13 +33,13 @@ const Post: React.FC<PropsType> = (props) => {
     const actions = [
         <Tooltip key="comment-basic-like" title="Like">
             <span onClick={like}>
-                {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
+                {action === 'liked' ? <LikeFilled /> : <LikeOutlined />}
                 <span className="comment-action">{likes}</span>
             </span>
         </Tooltip>,
         <Tooltip key="comment-basic-dislike" title="Dislike">
             <span onClick={dislike}>
-                {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
+                {action === 'disliked' ? <DislikeFilled /> : <DislikeOutlined />}
                 <span className="comment-action">{dislikes}</span>
             </span>
         </Tooltip>

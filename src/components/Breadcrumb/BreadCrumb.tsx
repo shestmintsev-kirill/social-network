@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 
-const BreadCrumb: React.FC = () => {
+export const BreadCrumb: React.FC = () => {
     const [breadcrumbItem, setBreadcrumbItem] = useState<string | null>(null);
     const location = useLocation();
 
@@ -19,5 +19,3 @@ const BreadCrumb: React.FC = () => {
         </Breadcrumb>
     );
 };
-
-export default BreadCrumb;

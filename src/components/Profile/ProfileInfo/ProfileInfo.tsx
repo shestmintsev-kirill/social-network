@@ -113,18 +113,20 @@ type ProfileDescriptionPropsType = {
 const ProfileDescription: React.FC<ProfileDescriptionPropsType> = ({ profile, isOwner }) => {
     const status = useSelector((state: AppStateType) => state.profilePage.status);
 
-    const profileContacts = Object.entries(profile?.contacts).map((contact: string[], index: number) => {
-        const [name, value] = contact;
-        return (
-            value && (
-                <div key={index}>
-                    <a href={value} target="_blank" style={{ whiteSpace: 'nowrap' }} rel="noreferrer">
-                        {name}
-                    </a>
-                </div>
-            )
-        );
-    });
+    const profileContacts = Object.entries(profile?.contacts).map(
+        (contact: Array<string | null>, index: number) => {
+            const [name, value] = contact;
+            return (
+                value && (
+                    <div key={index}>
+                        <a href={value} target="_blank" style={{ whiteSpace: 'nowrap' }} rel="noreferrer">
+                            {name}
+                        </a>
+                    </div>
+                )
+            );
+        }
+    );
 
     return (
         <>

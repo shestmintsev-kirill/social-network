@@ -21,31 +21,28 @@ type ProfileDescriptionFormValuesType = {
 };
 
 const ProfileDescriptionForm: React.FC<ProfileDescriptionFormPropsType> = ({
-    profile,
     closeEditMode,
+    profile,
     authorizedUserId,
     errors
 }) => {
     const dispatch = useDispatch();
-    const examValue = (value: string) => {
-        return value.length ? value : '';
-    };
 
     const formik = useFormik({
         initialValues: {
             fullName: profile.fullName,
-            aboutMe: examValue(profile.aboutMe),
+            aboutMe: profile.aboutMe,
             lookingForAJob: profile.lookingForAJob,
-            lookingForAJobDescription: examValue(profile.lookingForAJobDescription),
+            lookingForAJobDescription: profile.lookingForAJobDescription,
             contacts: {
-                facebook: examValue(profile.contacts.facebook),
-                github: examValue(profile.contacts.github),
-                instagram: examValue(profile.contacts.instagram),
-                mainLink: examValue(profile.contacts.mainLink),
-                twitter: examValue(profile.contacts.twitter),
-                vk: examValue(profile.contacts.vk),
-                website: examValue(profile.contacts.website),
-                youtube: examValue(profile.contacts.youtube)
+                facebook: profile.contacts.facebook,
+                github: profile.contacts.github,
+                instagram: profile.contacts.instagram,
+                mainLink: profile.contacts.mainLink,
+                twitter: profile.contacts.twitter,
+                vk: profile.contacts.vk,
+                website: profile.contacts.website,
+                youtube: profile.contacts.youtube
             }
         },
         onSubmit: async (values: ProfileDescriptionFormValuesType) => {
@@ -90,7 +87,9 @@ const ProfileDescriptionForm: React.FC<ProfileDescriptionFormPropsType> = ({
             )}
             <Contacts contacts={formik.values.contacts} onChange={formik.handleChange} errors={errors} />
             <div>
-                <Button htmlType={'submit'}>Save</Button>
+                <Button disabled={!formik.isValid} htmlType={'submit'}>
+                    Save
+                </Button>
             </div>
             {!!errors.length &&
                 errors.map((err: string, index: number) => (
@@ -111,7 +110,7 @@ type ContactsPropsType = {
 
 const Contacts: React.FC<ContactsPropsType> = ({ contacts, onChange, errors }) => {
     const err = errors.map((e: string) => {
-        return e.split('->')[1].replace(')', '').toLowerCase();
+        return e.split('->')[1]?.replace(')', '').toLowerCase();
     });
 
     return (
@@ -120,7 +119,7 @@ const Contacts: React.FC<ContactsPropsType> = ({ contacts, onChange, errors }) =
                 <InputLow
                     key={contact}
                     title={contact}
-                    isError={err.some((e: string) => e === contact.toLowerCase())}
+                    isError={err.some((e: string | null) => e === contact.toLowerCase())}
                     name={`contacts.${contact}`}
                     onChange={onChange}
                     value={contacts[contact]}

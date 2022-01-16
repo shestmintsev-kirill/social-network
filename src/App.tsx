@@ -10,8 +10,8 @@ import Users from './components/Users/Users';
 import { initializeApp } from './redux/app-reducer';
 import { AppStateType } from './redux/redux-store';
 import { Layout, Skeleton } from 'antd';
-import Navbar from './components/Navbar/Navbar';
-import BreadCrumb from './components/Breadcrumb/BreadCrumb';
+import { Navbar } from './components/Navbar/Navbar';
+import { BreadCrumb } from './components/Breadcrumb/BreadCrumb';
 
 const { Content, Footer } = Layout;
 

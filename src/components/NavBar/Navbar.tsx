@@ -6,7 +6,7 @@ import { useState } from 'react';
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
-const Navbar: React.FC = () => {
+export const Navbar: React.FC = () => {
     const [collapsed, setCollapsed] = useState<boolean>(false);
 
     return (
@@ -39,5 +39,3 @@ const Navbar: React.FC = () => {
         </Sider>
     );
 };
-
-export default Navbar;

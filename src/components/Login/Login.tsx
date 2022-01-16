@@ -32,13 +32,13 @@ const Login: React.FC = () => {
     );
 };
 
-export interface LoginValuesType {
+export type LoginValuesType = {
     email: string;
     password: string;
     confirmPassword?: string;
     captcha: string;
     rememberMe: boolean;
-}
+};
 
 type LoginFormPropsType = {
     authLogin: (values: LoginValuesType) => void;
