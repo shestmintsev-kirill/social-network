@@ -1,0 +1,2 @@
+(this["webpackJsonpreact-app"]=this["webpackJsonpreact-app"]||[]).push([[7],{423:function(t,e,r){"use strict";r.r(e);var s=r(428),a=r(90),c=r(47),i=r(7);e.default=function(){return Object(i.jsx)(i.Fragment,{children:Object(i.jsx)(s.a,{status:"404",title:"404",subTitle:"Sorry, the page you visited does not exist.",extra:Object(i.jsx)(a.a,{type:"primary",children:Object(i.jsx)(c.b,{to:"/profile",children:"Back to home"})})})})}}}]);
+//# sourceMappingURL=7.e8300273.chunk.js.map
