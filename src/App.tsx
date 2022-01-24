@@ -1,8 +1,8 @@
 import 'antd/dist/antd.css';
 import React, { Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
-import { useTransition, animated } from 'react-spring';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { animated } from 'react-spring';
 import './App.css';
 import Preloader from './components/common/Preloader/Preloader';
 import Header from './components/Header/Header';
@@ -13,6 +13,7 @@ import { AppStateType } from './redux/redux-store';
 import { Layout, Skeleton } from 'antd';
 import { Navbar } from './components/Navbar/Navbar';
 import { BreadCrumb } from './components/Breadcrumb/BreadCrumb';
+import { useRouteTransitions } from './Hooks/useRouteTransitions';
 
 const { Content, Footer } = Layout;
 
@@ -24,18 +25,11 @@ const ErrorPage = React.lazy(() => import('./pages/ErrorPage'));
 const App: React.FC = () => {
     const initialized = useSelector((state: AppStateType) => state.app.initialized);
     const dispatch = useDispatch();
-    const location = useLocation();
+    const transitions = useRouteTransitions();
 
     useEffect(() => {
         dispatch(initializeApp());
     }, [dispatch]);
-
-    const transitions = useTransition(location, {
-        keys: (location) => location.pathname,
-        from: { display: 'none', transform: 'scale(0.9)', opacity: 0 },
-        enter: { display: 'block', transform: 'scale(1)', opacity: 1 },
-        leave: { display: 'none' }
-    });
 
     if (!initialized) {
         return <Preloader />;
