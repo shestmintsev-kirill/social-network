@@ -3,7 +3,7 @@ import { PostType } from '../../../types/types';
 import { Textarea } from '../../common/FormsControls/FormsControls';
 import s from './MyPosts.module.css';
 import Post from './Post/Post';
-import { Button, Skeleton } from 'antd';
+import { Button, message, Skeleton } from 'antd';
 import { AppStateType } from '../../../redux/redux-store';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../redux/profile-reducer';
@@ -45,6 +45,7 @@ const PostForm: React.FC = () => {
         onSubmit: (values: PostFormValues, { resetForm }) => {
             dispatch(actions.addPost(values.post));
             resetForm();
+            message.success('New post added');
         }
     });
 

@@ -84,9 +84,10 @@ export const getStatus =
 
 export const updateStatus =
     (status: string): ThunkType =>
-    async (dispatch) => {
+    async (dispatch, getState) => {
         const data = await profileAPI.updateStatus(status);
         if (data.resultCode === 0) {
+            if (getState().profilePage.status !== status) message.success('Status updated');
             dispatch(actions.setStatus(status));
         }
     };
