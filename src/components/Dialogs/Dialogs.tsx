@@ -8,12 +8,17 @@ import { Button, Comment, Avatar, Divider } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppStateType } from '../../redux/redux-store';
 import { useIsAuth } from '../../Hooks/useIsAuth';
+import { Redirect } from 'react-router-dom';
 
 const Dialogs: React.FC = () => {
-    useIsAuth();
+    const isAuth = useIsAuth();
 
     const [currentUser, setCurrentUser] = useState<number>(0);
     const dialogsPage = useSelector((state: AppStateType) => state.dialogsPage);
+
+    if (!isAuth) {
+        return <Redirect to={'/login'} />;
+    }
 
     const dialogsElements = dialogsPage.dialogs.map((d: DialogType) => (
         <div key={d.id} className={s.dialog}>

@@ -10,25 +10,30 @@ import {
 } from '../redux/chat-reducer';
 import { AppStateType } from '../redux/redux-store';
 import { useIsAuth } from '../Hooks/useIsAuth';
+import { Redirect } from 'react-router-dom';
 
 const { TextArea } = Input;
 
 const ChatPage: React.FC = () => {
-    useIsAuth();
+    const isAuth = useIsAuth();
 
+    if (!isAuth) {
+        return <Redirect to={'/login'} />;
+    }
     return <Chat />;
 };
 
 const Chat: React.FC = () => {
     const dispatch = useDispatch();
     const status = useSelector((state: AppStateType) => state.chat.status);
+    const isAuth = useIsAuth();
 
     useEffect(() => {
-        dispatch(startMessagesListening());
+        if (isAuth) dispatch(startMessagesListening());
         return () => {
             dispatch(stopMessagesListening());
         };
-    }, [dispatch]);
+    }, [dispatch, isAuth]);
 
     return (
         <div>
