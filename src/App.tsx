@@ -11,7 +11,7 @@ import Users from './components/Users/Users';
 import { initializeApp } from './redux/app-reducer';
 import { AppStateType } from './redux/redux-store';
 import { Layout, Skeleton } from 'antd';
-import { Navbar } from './components/Navbar/Navbar';
+import { Navbar } from './components/NavBar/Navbar';
 import { BreadCrumb } from './components/Breadcrumb/BreadCrumb';
 import { useRouteTransitions } from './Hooks/useRouteTransitions';
 
