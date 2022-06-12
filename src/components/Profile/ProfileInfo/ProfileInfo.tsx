@@ -63,7 +63,7 @@ const ProfileInfo: React.FC = () => {
                 </div>
             }
             actions={[
-                <div>
+                <div key={params?.userId}>
                     {!params?.userId && !editMode && (
                         <Button onClick={() => setEditMode(true)}>Edit profile</Button>
                     )}

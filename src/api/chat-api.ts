@@ -1,4 +1,4 @@
-let subscribers = {
+const subscribers = {
     'messages-received': [] as MessagesReceivedSubscriberType[],
     'status-changed': [] as StatusChangedSubscriberType[]
 };
