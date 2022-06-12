@@ -18,5 +18,3 @@ jobs:
         run: npm run build
       - name: unit tests
         run: npm run test
-      - name: deploy project
-        run: npm run deploy
