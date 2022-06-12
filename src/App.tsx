@@ -72,7 +72,7 @@ const App: React.FC = () => {
                                 </Suspense>
                             </animated.div>
                         ))}
-                        <Footer style={{ textAlign: 'center' }}>Sosial network 2022</Footer>
+                        <Footer style={{ textAlign: 'center' }}>Social network 2022</Footer>
                     </Content>
                 </Layout>
             </Content>
